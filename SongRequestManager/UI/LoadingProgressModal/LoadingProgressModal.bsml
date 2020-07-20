@@ -1,0 +1,12 @@
+﻿<modal id="modal" show-event='open-modal' hide-event='close-modal' clickerino-offerino-closerino="false" size-delta-x='50' size-delta-y='45' move-to-center='true'>
+    <vertical child-control-height='false' child-expand-width='true' child-expand-height='true'>
+        <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' child-align='UpperCenter'>
+            <text text='Loading' font-size='8' align='Center'/>
+        </horizontal>
+        <stack child-control-width='true' child-expand-width='false' child-align='MiddleCenter' vertical-fit='PreferredSize'>
+            <loading-indicator preserve-aspect='true' pref-width='20' pref-height='20' source='#LoadingIndicator'/>
+            <text align='Center' font-size='7' text='~progress'/>
+        </stack>
+        <button on-click='cancel-click' child-align='MiddleCenter' text='Cancel'/>
+    </vertical>
+</modal>

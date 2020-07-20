@@ -1,0 +1,14 @@
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+
+    <tab-selector tab-tag='settings-tab' vertical-fit='PreferredSize' pad-top='3' Preferred-Height="8"/>
+
+    <bg child-control-height='false' child-expand-height='false' delta-size-x='5' delta-size-y='5' anchor-min-x='0.05' anchor-max-x='0.95' anchor-min-y='0.02' anchor-max-y='0.90'>
+        <tab tags='settings-tab' tab-name='General'>
+            <scrollable-settings-container child-control-height='false' child-expand-height='false' child-align='UpperCenter'>
+                <string-setting text='Prefix' value='prefix-string'/>
+                <dropdown-list-setting text='Minimum log level' value='loglevel-choice' choices='loglevel-options' />
+            </scrollable-settings-container>
+        </tab>
+    </bg>
+</bg>
