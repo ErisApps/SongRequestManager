@@ -36,7 +36,6 @@ namespace SongRequestManager
 		[OnEnable]
 		public void OnEnable()
 		{
-			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh -= OnLateMenuSceneLoadedFresh;
 			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnLateMenuSceneLoadedFresh;
 			
 			PluginUtils.Setup();
