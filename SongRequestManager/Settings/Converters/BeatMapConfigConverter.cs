@@ -5,9 +5,9 @@ using IPA.Config.Data;
 using IPA.Config.Stores;
 using Newtonsoft.Json;
 
-namespace SongRequestManager.Settings
+namespace SongRequestManager.Settings.Converters
 {
-	public class BeatMapConfigConverter : ValueConverter<Beatmap>
+	internal sealed class BeatMapConfigConverter : ValueConverter<Beatmap>
 	{
 		public override Beatmap FromValue(Value value, object parent)
 		{

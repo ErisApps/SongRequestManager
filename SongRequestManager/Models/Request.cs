@@ -1,7 +1,7 @@
 ﻿using System;
 using BeatSaverSharp;
 using IPA.Config.Stores.Attributes;
-using SongRequestManager.Settings;
+using SongRequestManager.Settings.Converters;
 
 namespace SongRequestManager.Models
 {

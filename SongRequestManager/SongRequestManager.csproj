@@ -104,7 +104,7 @@
         <Compile Include="Services\Interfaces\ICommandManager.cs" />
         <Compile Include="Services\Interfaces\ISongQueueService.cs" />
         <Compile Include="Services\SongQueueService.cs" />
-        <Compile Include="Settings\BeatMapConfigConverter.cs" />
+        <Compile Include="Settings\Converters\BeatMapConfigConverter.cs" />
         <Compile Include="Settings\GeneralSettings.cs" />
         <Compile Include="Settings\SettingsController.cs" />
         <Compile Include="Settings\SRMConfig.cs" />
