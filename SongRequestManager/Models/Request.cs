@@ -9,6 +9,7 @@ namespace SongRequestManager.Models
 	{
 		public virtual string BeatSaverKey { get; set; }
 		public virtual RequestStatus Status { get; set; }
+		[UseConverter(typeof(DateTimeConfigConverter))]
 		public virtual DateTime RequestDateTime { get; set; }
 		[UseConverter(typeof(BeatMapConfigConverter))]
 		public virtual Beatmap BeatMap { get; set; }
