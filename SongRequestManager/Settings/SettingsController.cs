@@ -1,24 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Notify;
 using UnityEngine;
 using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.Settings
 {
-	public class SettingsController : MonoBehaviour
+	public class SettingsController : INotifiableHost
 	{
-		public static SettingsController Instance;
-
-		public void Awake()
-		{
-			if (Instance == null)
-			{
-				Instance = this;
-				DontDestroyOnLoad(this);
-			}
-		}
-
 		[UIValue("prefix-string")]
 		public string Prefix
 		{
@@ -42,10 +32,7 @@ namespace SongRequestManager.Settings
 		public IPA.Logging.Logger.LogLevel MinimumLogLevel
 		{
 			get => SRMConfig.Instance.GeneralSettings.MinimumLogLevel;
-			set
-			{
-				SRMConfig.Instance.GeneralSettings.MinimumLogLevel = value;
-			}
+			set => SRMConfig.Instance.GeneralSettings.MinimumLogLevel = value;
 		}
 
 		[UIValue("slider-int")]
@@ -84,5 +71,7 @@ namespace SongRequestManager.Settings
 
 		[UIAction("#apply")]
 		public void OnApply() => Logger.Log($"prefix-string applied, now: {Prefix}");
+
+		public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using BeatSaberMarkupLanguage.Settings;
 using SongRequestManager.Services;
 using SongRequestManager.Services.Interfaces;
-using SongRequestManager.Settings;
 using SongRequestManager.UI;
 using UnityEngine;
 using Logger = SongRequestManager.Utilities.Logger;
@@ -29,9 +27,6 @@ namespace SongRequestManager
 		public void Init()
 		{
 			Instance = this;
-
-			var settingsGo = gameObject.AddComponent<SettingsController>();
-			BSMLSettings.instance.AddSettingsMenu("SRM (Alpha)", "SongRequestManager.Settings.Settings.bsml", settingsGo);
 		}
 
 		// Setup
@@ -57,7 +52,7 @@ namespace SongRequestManager
 			if (!srmButtonGo)
 			{
 				srmButtonGo = gameObject.AddComponent<SongRequestsButtonViewController>();
-				Object.DontDestroyOnLoad(srmButtonGo);
+				DontDestroyOnLoad(srmButtonGo);
 			}
 			else
 			{
