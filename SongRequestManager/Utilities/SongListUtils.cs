@@ -24,7 +24,10 @@ namespace SongRequestManager.Utilities
 				Logger.Log($"Scrolling to {levelId}!");
 
 				// Disable SongBrowser filters as that might prevent us from finding the song in the list
-				PluginUtils.DisableSongBrowserFilters();
+				if (PluginUtils.SongBrowserEnabled)
+				{
+					PluginUtils.DisableSongBrowserFilters();
+				}
 
 				// Make sure our custom songPack is selected
 				SelectCustomSongPack();

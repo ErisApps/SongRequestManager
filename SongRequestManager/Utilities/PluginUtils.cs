@@ -66,12 +66,12 @@ namespace SongRequestManager.Utilities
 			}
 		}
 
+		/// <remarks>
+		///	Check whether SongBrowser is enabled before invoking this method.
+		/// If not, and SongBrowser isn't installed, it will result in a FileNotFoundException.
+		/// </remarks>
 		public static void DisableSongBrowserFilters()
 		{
-			if (!SongBrowserEnabled)
-			{
-				return;
-			}
 
 			var songBrowserUi = SongBrowser.SongBrowserApplication.Instance.GetField<SongBrowser.UI.SongBrowserUI, SongBrowser.SongBrowserApplication>("_songBrowserUI");
 			if (songBrowserUi)
