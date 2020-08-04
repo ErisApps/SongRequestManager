@@ -62,7 +62,10 @@ namespace SongRequestManager.UI
 		private void OnDestroy()
 		{
 			Logger.Log("Oh noes, the SRM button got destroyed!!!");
-			SongRequestManager.Instance.SongQueueService.RequestQueue.CollectionChanged -= OnRequestQueueChanged;
+			if (SongRequestManager.Instance && SongRequestManager.Instance.SongQueueService != null)
+			{
+				SongRequestManager.Instance.SongQueueService.RequestQueue.CollectionChanged -= OnRequestQueueChanged;
+			}
 		}
 
 		private void OnRequestQueueChanged(object sender, NotifyCollectionChangedEventArgs e)
