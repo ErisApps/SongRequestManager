@@ -141,6 +141,14 @@ namespace SongRequestManager.Services
 			SRMConfig.Instance.Changed();
 		}
 
+		public void Skip(Request request)
+		{
+			RequestQueue.Remove(request);
+			SRMConfig.Instance.QueueData.Remove(request);
+
+			SRMConfig.Instance.Changed();
+		}
+
 		private void RequestQueueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			Logger.Log($"Queue changed: {e.Action}");

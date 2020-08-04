@@ -34,6 +34,16 @@ namespace SongRequestManager.UI
 		public void Select(TableView _, int row)
 		{
 			SelectedRequest = SongRequestManager.Instance.SongQueueService.RequestQueue[row];
+			NotifyPropertyChanged(nameof(IsRequestSelected));
+		}
+
+		[UIValue("is-request-selected")]
+		public bool IsRequestSelected => SelectedRequest != null;
+
+		[UIAction("skip-button-click")]
+		internal void Skip()
+		{
+			SongRequestManager.Instance.SongQueueService.Skip(SelectedRequest);
 		}
 
 		[UIAction("play-button-click")]

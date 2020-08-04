@@ -14,5 +14,6 @@ namespace SongRequestManager.Services.Interfaces
 		bool ToggleQueue();
 		Task<(bool, string)> AddRequest(Request request);
 		Task Play(Request request, CancellationToken cancellationToken, IProgress<double> downloadProgress = null);
+		void Skip(Request request);
 	}
 }

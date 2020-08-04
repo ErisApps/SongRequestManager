@@ -33,7 +33,8 @@
                     stroke-color='#aaa'
                     face-color='#ccc'
                     child-align='MiddleCenter'
-                    interactable='false'/>
+                    interactable='~is-request-selected'
+                    on-click='skip-button-click'/>
             <button pref-width='28'
                     word-wrapping='false'
                     text='Ban'
@@ -41,6 +42,7 @@
             <button pref-width='28'
                     word-wrapping='false'
                     text='Play'
+                    interactable='~is-request-selected'
                     on-click='play-button-click'/>
             <vertical>
                 <button id='queue-button'
