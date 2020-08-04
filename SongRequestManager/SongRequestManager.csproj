@@ -106,6 +106,7 @@
         <Compile Include="Services\SongQueueService.cs" />
         <Compile Include="Settings\Converters\BeatMapConfigConverter.cs" />
         <Compile Include="Settings\Converters\DateTimeConfigConverter.cs" />
+        <Compile Include="Settings\Converters\EnumStringConfigConverter.cs" />
         <Compile Include="Settings\GeneralSettings.cs" />
         <Compile Include="Settings\SettingsController.cs" />
         <Compile Include="Settings\SRMConfig.cs" />
