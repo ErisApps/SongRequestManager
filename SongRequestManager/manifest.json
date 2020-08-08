@@ -12,5 +12,8 @@
     "BeatSaverSharp": "^1.5.2",
     "ChatCore": "^1.0.0-rc5",
     "SongCore": "^2.9.6"
+  },
+  "links": {
+    "project-home": "https://github.com/ErisApps/SongRequestManager"
   }
 }
