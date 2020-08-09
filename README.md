@@ -8,6 +8,7 @@ This mod requires a few other mods in order to work.
 - BeatSaverSharp v1.5.2 or higher
 - SongCore v2.9.6 or higher
 - ChatCore v1.0.0-rc5 or higher ([it's not yet available on beatmods/modassistant, so grab it here](https://github.com/brian91292/ChatCore/releases))
+- SiraUtil v0.1.1 or higher
 
 Installation is fairly simple.
 1. Grab the latest plugin release from the [releases page](https://github.com/ErisApps/SongRequestManager/releases) (once there is a release)
