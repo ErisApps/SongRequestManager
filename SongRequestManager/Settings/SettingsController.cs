@@ -47,7 +47,11 @@ namespace SongRequestManager.Settings
 		// ============== Twitch ============== //
 
 		[UIValue("TwitchEnabled-bool")]
-		public bool TwitchEnabled { get; set; }
+		public bool TwitchEnabled
+		{
+			get => SRMConfig.Instance.TwitchSettings.Enabled;
+			set => SRMConfig.Instance.TwitchSettings.Enabled = value;
+		}
 
 		[UIValue("user-request-limit")]
 		public int UserRequestLimit { get; set; }

@@ -28,8 +28,18 @@ namespace SongRequestManager.Services
 
 		void IChatHandlerService.Setup()
 		{
-			_chatServiceMultiplexer = _chatCore.RunAllServices();
-			_chatServiceMultiplexer.OnTextMessageReceived += OnTextMessageReceived;
+			// ChatCore setup
+			_chatCore = ChatCoreInstance.Create();
+			
+			if (_chatCore != null)
+			{
+				if (SRMConfig.Instance.TwitchSettings.Enabled)
+				{
+					_twitchService = _chatCore.RunTwitchServices();
+					_twitchService.OnTextMessageReceived -= OnTextMessageReceived;
+					_twitchService.OnTextMessageReceived += OnTextMessageReceived;
+				}
+			}
 		}
 
 		private async void OnTextMessageReceived(IChatService chatService, IChatMessage message)
@@ -56,9 +66,17 @@ namespace SongRequestManager.Services
 
 		public void Dispose()
 		{
-			_chatCore.StopAllServices();
+			Logger.Log("Disposing ChatHandlerService");
+			if (_chatCore != null)
+			{
+				_chatCore.StopAllServices();
 
-			_commandManager.Dispose();
+				if (_twitchService != null)
+				{
+					_twitchService.OnTextMessageReceived -= OnTextMessageReceived;
+					_twitchService = null;
+				}
+			}
 		}
 	}
 }
