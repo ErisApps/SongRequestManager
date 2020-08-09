@@ -101,6 +101,8 @@
         <Compile Include="Commands\RequestCommand.cs" />
         <Compile Include="Converters\ButtonColorValueConverter.cs" />
         <Compile Include="Extensions\VersionExtensions.cs" />
+        <Compile Include="Installers\AppInstaller.cs" />
+        <Compile Include="Installers\MenuInstaller.cs" />
         <Compile Include="Models\Request.cs" />
         <Compile Include="Models\RequestStatus.cs" />
         <Compile Include="Plugin.cs" />

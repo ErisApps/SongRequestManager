@@ -38,9 +38,11 @@ namespace SongRequestManager
 		[OnEnable]
 		public void OnEnable()
 		{
-			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnLateMenuSceneLoadedFresh;
+			SiraUtil.Zenject.Installer.RegisterAppInstaller<Installers.AppInstaller>();
+			SiraUtil.Zenject.Installer.RegisterMenuInstaller<Installers.MenuInstaller>();
 
 			PluginUtils.Setup();
+			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnLateMenuSceneLoadedFresh;
 
 			BSMLSettings.instance.AddSettingsMenu("SRM (Alpha)", "SongRequestManager.Settings.Settings.bsml", _settingsController ??= new SettingsController());
 		}
@@ -56,6 +58,9 @@ namespace SongRequestManager
 			
 			BSMLSettings.instance.RemoveSettingsMenu(_settingsController);
 			_settingsController = null;
+
+			SiraUtil.Zenject.Installer.UnregisterMenuInstaller<Installers.MenuInstaller>();
+			SiraUtil.Zenject.Installer.UnregisterAppInstaller<Installers.AppInstaller>();
 		}
 
 		private void OnLateMenuSceneLoadedFresh(ScenesTransitionSetupDataSO obj)
