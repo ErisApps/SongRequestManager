@@ -111,10 +111,6 @@
         <Compile Include="Services\BeatSaverService.cs" />
         <Compile Include="Services\ChatHandlerService.cs" />
         <Compile Include="Services\CommandManager.cs" />
-        <Compile Include="Services\Interfaces\IBeatSaverService.cs" />
-        <Compile Include="Services\Interfaces\IChatHandlerService.cs" />
-        <Compile Include="Services\Interfaces\ICommandManager.cs" />
-        <Compile Include="Services\Interfaces\ISongQueueService.cs" />
         <Compile Include="Services\SongQueueService.cs" />
         <Compile Include="Services\UserRequestTrackerManager.cs" />
         <Compile Include="Settings\Converters\BeatMapConfigConverter.cs" />
