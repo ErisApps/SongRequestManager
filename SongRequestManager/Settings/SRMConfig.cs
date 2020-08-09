@@ -28,14 +28,5 @@ namespace SongRequestManager.Settings
 			// this is called whenever one of the virtual properties is changed
 			// can be called to signal that the content has been changed
 		}
-
-		public virtual void OnReload()
-		{
-			// this is called whenever the config file is reloaded from disk
-			// use it to tell all of your systems that something has changed
-            
-			// this is called off of the main thread, and is not safe to interact
-			//   with Unity in
-		}
 	}
 }
