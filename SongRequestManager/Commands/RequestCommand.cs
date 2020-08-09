@@ -2,20 +2,20 @@
 using System.Threading.Tasks;
 using ChatCore.Interfaces;
 using SongRequestManager.Models;
-using SongRequestManager.Services.Interfaces;
+using SongRequestManager.Services;
 using SongRequestManager.Utilities;
+using Zenject;
 
 namespace SongRequestManager.Commands
 {
 	public class RequestCommand : ICommand
 	{
-		private readonly ISongQueueService _songQueueService;
-		private readonly IBeatSaverService _beatSaverService;
+		private readonly SongQueueService _songQueueService;
 
-		public RequestCommand(ISongQueueService songQueueService, IBeatSaverService beatSaverService)
+		[Inject]
+		public RequestCommand(SongQueueService songQueueService)
 		{
 			_songQueueService = songQueueService;
-			_beatSaverService = beatSaverService;
 
 			Alias = new[] {"bsr", "sr", "request"};
 			RequiredPermissions = new string[0];

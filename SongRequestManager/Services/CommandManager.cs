@@ -1,31 +1,21 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using SongRequestManager.Commands;
-using SongRequestManager.Services.Interfaces;
 using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.Services
 {
-	public class CommandManager : ICommandManager
+	public class CommandManager
 	{
-		private readonly ISongQueueService _songQueueService;
-		private readonly IBeatSaverService _beatSaverService;
-		private readonly IUserRequestTrackerManager _userRequestTrackerManager;
-
 		private List<ICommand> _commands;
 
-		public CommandManager(ISongQueueService songQueueService, IBeatSaverService beatSaverService, IUserRequestTrackerManager userRequestTrackerManager)
+		public CommandManager(List<ICommand> commands)
 		{
-			_songQueueService = songQueueService;
-			_beatSaverService = beatSaverService;
-			_userRequestTrackerManager = userRequestTrackerManager;
-
-			_commands = new List<ICommand>();
+			Logger.Log($"Injected {commands.Count} command(s)");
+			_commands = commands;
 		}
 
-		public void Setup()
+		/*public void Setup()
 		{
 			_commands.Clear();
 			var possibleParameters = new List<object>{_beatSaverService, _songQueueService, _userRequestTrackerManager};
@@ -61,7 +51,7 @@ namespace SongRequestManager.Services
 			stopwatch.Stop();
 			
 			Logger.Log($"Command initialization took {stopwatch.Elapsed:c}");
-		}
+		}*/
 
 		public ICommand FindCommand(string commandName)
 		{

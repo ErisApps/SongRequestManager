@@ -2,31 +2,27 @@
 using System.Linq;
 using ChatCore;
 using ChatCore.Interfaces;
-using ChatCore.Services;
-using SongRequestManager.Services.Interfaces;
+using ChatCore.Services.Twitch;
 using SongRequestManager.Settings;
+using Zenject;
 using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.Services
 {
-	public class ChatHandlerService : IChatHandlerService
+	public class ChatHandlerService : IInitializable, IDisposable
 	{
-		private readonly ICommandManager _commandManager;
-		private readonly IBeatSaverService _beatSaverService;
+		private readonly CommandManager _commandManager;
 
-		private ChatCoreInstance _chatCore;
-		private ChatServiceMultiplexer _chatServiceMultiplexer;
+		private ChatCoreInstance? _chatCore;
+		private TwitchService? _twitchService;
 
-		public ChatHandlerService(ICommandManager commandManager, IBeatSaverService beatSaverService)
+		[Inject]
+		public ChatHandlerService(CommandManager commandManager)
 		{
 			_commandManager = commandManager;
-			_beatSaverService = beatSaverService;
-
-			// ChatCore setup
-			_chatCore = ChatCoreInstance.Create();
 		}
 
-		void IChatHandlerService.Setup()
+		public void Initialize()
 		{
 			// ChatCore setup
 			_chatCore = ChatCoreInstance.Create();

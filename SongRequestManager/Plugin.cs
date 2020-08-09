@@ -8,6 +8,7 @@ using SemVer;
 using SongRequestManager.Extensions;
 using SongRequestManager.Settings;
 using SongRequestManager.Utilities;
+using SongRequestManager.UI;
 using UnityEngine;
 using Config = IPA.Config.Config;
 using Logger = SongRequestManager.Utilities.Logger;
@@ -22,6 +23,9 @@ namespace SongRequestManager
 		private static Version? _version;
 
 		private SettingsController? _settingsController;
+
+		private SongRequestsButtonViewController _srmButtonGo;
+
 		public static string Name => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
 		public static Version Version => _version ??= _metadata?.Version ?? Assembly.GetExecutingAssembly().GetName().Version.ToSemVerVersion();
 
@@ -54,8 +58,6 @@ namespace SongRequestManager
 
 			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh -= OnLateMenuSceneLoadedFresh;
 
-			SongRequestManager.Instance.ShowEndedSendCleaningTeam();
-			
 			BSMLSettings.instance.RemoveSettingsMenu(_settingsController);
 			_settingsController = null;
 
@@ -67,18 +69,10 @@ namespace SongRequestManager
 		{
 			Logger.Log("BS_utils lateMenuSceneLoadedFresh invoked", IPA.Logging.Logger.Level.Trace);
 
-			SongRequestManager instance = Resources.FindObjectsOfTypeAll<SongRequestManager>().FirstOrDefault();
-			if (!instance)
+			if (!_srmButtonGo || _srmButtonGo.GetComponent<SongRequestsButtonViewController>() == null)
 			{
-				instance = new GameObject($"[{nameof(SongRequestManager)}] - Instance").AddComponent<SongRequestManager>();
-				Object.DontDestroyOnLoad(instance.gameObject);
+				_srmButtonGo ??= new GameObject().AddComponent<SongRequestsButtonViewController>();
 			}
-			else
-			{
-				instance.Init();
-			}
-
-			instance.TheShowMustGoOn();
 		}
 	}
 }

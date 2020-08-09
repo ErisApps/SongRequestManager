@@ -4,12 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
-using SongRequestManager.Services.Interfaces;
 using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Services
 {
-	public sealed class BeatSaverService : IBeatSaverService
+	public sealed class BeatSaverService
 	{
 		public BeatSaver BeatSaverSharpInstance { get; private set; }
 

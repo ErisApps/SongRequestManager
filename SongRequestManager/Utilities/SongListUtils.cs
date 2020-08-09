@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq;
 using HMUI;
 using IPA.Utilities;
-using UnityEngine;
+using Zenject;
 
 namespace SongRequestManager.Utilities
 {
@@ -13,13 +13,21 @@ namespace SongRequestManager.Utilities
 	///
 	/// Marked as "Performance critical sections" so might need some further optimizations?
 	/// </summary>
-	public static class SongListUtils
+	public class SongListUtils
 	{
-		public static IEnumerator ScrollToLevel(string levelId, Action<bool> callback, bool animated)
-		{
-			var levelCollectionViewController = Resources.FindObjectsOfTypeAll<LevelCollectionViewController>().FirstOrDefault();
+		private LevelCollectionViewController _levelCollectionViewController;
+		private LevelFilteringNavigationController _levelFilteringNavigationController;
 
-			if (levelCollectionViewController)
+		[Inject]
+		protected void Construct(LevelCollectionViewController levelCollectionViewController, LevelFilteringNavigationController levelFilteringNavigationController)
+		{
+			_levelFilteringNavigationController = levelFilteringNavigationController;
+			_levelCollectionViewController = levelCollectionViewController;
+		}
+
+		public IEnumerator ScrollToLevel(string levelId, Action<bool> callback, bool animated)
+		{
+			if (_levelCollectionViewController)
 			{
 				Logger.Log($"Scrolling to {levelId}!");
 
@@ -35,7 +43,7 @@ namespace SongRequestManager.Utilities
 				yield return null;
 
 				// get the table view
-				var levelsTableView = levelCollectionViewController.GetField<LevelCollectionTableView, LevelCollectionViewController>("_levelCollectionTableView");
+				var levelsTableView = _levelCollectionViewController.GetField<LevelCollectionTableView, LevelCollectionViewController>("_levelCollectionTableView");
 
 				yield return null;
 
@@ -76,13 +84,10 @@ namespace SongRequestManager.Utilities
 			callback?.Invoke(false);
 		}
 
-		private static void SelectCustomSongPack()
+		private void SelectCustomSongPack()
 		{
-			// get the Level Filtering Nav Controller, the top bar
-			var levelFilteringNavigationController = Resources.FindObjectsOfTypeAll<LevelFilteringNavigationController>().First();
-
 			// get the tab bar
-			var tabBarViewController = levelFilteringNavigationController.GetField<TabBarViewController, LevelFilteringNavigationController>("_tabBarViewController");
+			var tabBarViewController = _levelFilteringNavigationController.GetField<TabBarViewController, LevelFilteringNavigationController>("_tabBarViewController");
 
 			if (tabBarViewController.selectedCellNumber != 3)
 			{
@@ -90,13 +95,13 @@ namespace SongRequestManager.Utilities
 				tabBarViewController.SelectItem(3);
 
 				// trigger a switch and reload
-				levelFilteringNavigationController.InvokeMethod<object, LevelFilteringNavigationController>("TabBarDidSwitch");
+				_levelFilteringNavigationController.InvokeMethod<object, LevelFilteringNavigationController>("TabBarDidSwitch");
 			}
 			else
 			{
 				// get the annotated view controller
 				var annotatedBeatMapLevelCollectionsViewController =
-					levelFilteringNavigationController.GetField<AnnotatedBeatmapLevelCollectionsViewController, LevelFilteringNavigationController>("_annotatedBeatmapLevelCollectionsViewController");
+					_levelFilteringNavigationController.GetField<AnnotatedBeatmapLevelCollectionsViewController, LevelFilteringNavigationController>("_annotatedBeatmapLevelCollectionsViewController");
 
 				// check if the first element is selected (whichi is custom maps)
 				if (annotatedBeatMapLevelCollectionsViewController.selectedItemIndex == 0)

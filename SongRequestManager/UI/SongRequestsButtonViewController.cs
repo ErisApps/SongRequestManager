@@ -1,18 +1,19 @@
 ﻿using System.Collections.Specialized;
-using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Notify;
+using BeatSaberMarkupLanguage.ViewControllers;
 using IPA.Config.Stores.Attributes;
 using SongRequestManager.Converters;
+using SongRequestManager.Services;
 using UnityEngine;
+using Zenject;
 using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.UI
 {
 	[NotifyPropertyChanges]
-	public class SongRequestsButtonViewController : MonoBehaviour, INotifiableHost
+	public class SongRequestsButtonViewController : BSMLAutomaticViewController
 	{
 		[UIValue("glowy-color")]
 		public string GlowColor { get; set; } = "#ff0d72";
@@ -23,49 +24,57 @@ namespace SongRequestManager.UI
 		[UIComponent("srm-button")]
 		private Transform _srmButtonTransform;
 
-		private SongRequestsFlowController? _songRequestsFlowController;
+		private StandardLevelDetailViewController _standardLevelDetailViewController;
+		private LevelSelectionFlowCoordinator _levelSelectionFlowCoordinator;
+		private SongQueueService _songQueueService;
+		private SongRequestsFlowCoordinator? _songRequestsFlowCoordinator;
 
 		[UIAction("button-click")]
 		internal void OpenRequestsView()
 		{
-			if (_songRequestsFlowController == null)
+			if (_songRequestsFlowCoordinator == null)
 			{
-				_songRequestsFlowController = BeatSaberUI.CreateFlowCoordinator<SongRequestsFlowController>();
+				return;
 			}
 
-			Resources.FindObjectsOfTypeAll<LevelSelectionFlowCoordinator>()
-				.First()
-				.PresentFlowCoordinator(_songRequestsFlowController);
+			_levelSelectionFlowCoordinator.PresentFlowCoordinator(_songRequestsFlowCoordinator);
 		}
 
-		private void Awake()
+		[Inject]
+		protected void Construct(StandardLevelDetailViewController standardLevelDetailViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator, SongQueueService songQueueService,
+			SongRequestsFlowCoordinator songRequestsFlowCoordinator)
 		{
-			Init();
+			Logger.Log("SRMBUTTON construct invoked");
+			_levelSelectionFlowCoordinator = levelSelectionFlowCoordinator;
+			_standardLevelDetailViewController = standardLevelDetailViewController;
+			_songRequestsFlowCoordinator = songRequestsFlowCoordinator;
+			_songQueueService = songQueueService;
 		}
 
-		public void Init()
+		public void Start()
 		{
-			var standardLevel = Resources.FindObjectsOfTypeAll<StandardLevelDetailViewController>().First();
+			Logger.Log("SRMBUTTON init invoked");
+			// var standardLevel = Resources.FindObjectsOfTypeAll<StandardLevelDetailViewController>().First();
+			var standardLevel = _standardLevelDetailViewController;
 			BSMLParser.instance.Parse(BeatSaberMarkupLanguage.Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "SongRequestManager.UI.SongRequestsButton.bsml"),
 				standardLevel.transform.Find("LevelDetail").gameObject, this);
 			_srmButtonTransform.localScale *= 0.7f; //no scale property in bsml as of now so manually scaling it
 
-			SongRequestManager.Instance.SongQueueService.RequestQueue.CollectionChanged += OnRequestQueueChanged;
+			_songQueueService.RequestQueue.CollectionChanged += OnRequestQueueChanged;
 			UpdateSrmButtonColor();
 		}
 
-		private void OnDisable()
+		protected override void OnDestroy()
 		{
-			Logger.Log("Oh noes, the SRM button got disabled!!!");
-		}
-		
-		private void OnDestroy()
-		{
-			Logger.Log("Oh noes, the SRM button got destroyed!!!");
-			if (SongRequestManager.Instance && SongRequestManager.Instance.SongQueueService != null)
+			Logger.Log("GET REKT!!!");
+			if (_songQueueService != null)
 			{
-				SongRequestManager.Instance.SongQueueService.RequestQueue.CollectionChanged -= OnRequestQueueChanged;
+				_songQueueService.RequestQueue.CollectionChanged -= OnRequestQueueChanged;
 			}
+		}
+
+		public void Dispose()
+		{
 		}
 
 		private void OnRequestQueueChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -86,23 +95,20 @@ namespace SongRequestManager.UI
 
 		private void UpdateSrmButtonColor()
 		{
-			if (SongRequestManager.Instance == null)
+			if (_songQueueService == null)
 			{
-				Logger.Log("SRM Instance null");
+				Logger.Log("SongQueueService instance null", IPA.Logging.Logger.Level.Warning);
+				return;
 			}
-			else if (SongRequestManager.Instance.SongQueueService == null)
-			{
-				Logger.Log("SongQueueService instance null");
-			}
-			else if (SongRequestManager.Instance.SongQueueService.RequestQueue == null)
-			{
-				Logger.Log("RequestQueue instance null");
-			}
-			
-			GlowColor = ButtonColorValueConverter.Convert(SongRequestManager.Instance.SongQueueService.QueuedRequestCount > 0);
-			PropertyChanged(this, new PropertyChangedEventArgs(nameof(GlowColor)));
-		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
+			if (_songQueueService.RequestQueue == null)
+			{
+				Logger.Log("RequestQueue instance null", IPA.Logging.Logger.Level.Warning);
+				return;
+			}
+
+			GlowColor = ButtonColorValueConverter.Convert(_songQueueService.QueuedRequestCount > 0);
+			NotifyPropertyChanged(nameof(GlowColor));
+		}
 	}
 }

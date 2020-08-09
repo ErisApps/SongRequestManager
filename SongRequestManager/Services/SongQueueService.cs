@@ -8,17 +8,16 @@ using System.Threading.Tasks;
 using IPA.Utilities;
 using SongCore;
 using SongRequestManager.Models;
-using SongRequestManager.Services.Interfaces;
 using SongRequestManager.Settings;
 using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Services
 {
-	public class SongQueueService : ISongQueueService
+	public class SongQueueService
 	{
-		private readonly IBeatSaverService _beatSaverService;
+		private readonly BeatSaverService _beatSaverService;
 
-		public SongQueueService(IBeatSaverService beatSaverService)
+		public SongQueueService(BeatSaverService beatSaverService)
 		{
 			_beatSaverService = beatSaverService;
 			RequestQueue = new ObservableCollection<Request>(SRMConfig.Instance.QueueData.Select(x =>

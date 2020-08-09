@@ -11,8 +11,10 @@ using HMUI;
 using IPA.Utilities.Async;
 using SongRequestManager.Converters;
 using SongRequestManager.Models;
+using SongRequestManager.Services;
 using SongRequestManager.Utilities;
 using UnityEngine;
+using Zenject;
 using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.UI
@@ -20,11 +22,18 @@ namespace SongRequestManager.UI
 	[HotReload]
 	public class SongRequestsListViewController : BSMLAutomaticViewController
 	{
-		private Request SelectedRequest;
+		private SongQueueService _songQueueService;
+		private SongListUtils _songListUtils;
 
-		public SongRequestsListViewController()
+		private Request SelectedRequest;
+		
+		public event Action DismissRequested;
+
+		[Inject]
+		protected void Construct(SongQueueService songQueueService, SongListUtils songListUtils)
 		{
-			SetQueueButtonState();
+			_songQueueService = songQueueService;
+			_songListUtils = songListUtils;
 		}
 
 		[UIComponent("requestsList")]
@@ -33,7 +42,7 @@ namespace SongRequestManager.UI
 		[UIAction("selectRequest")]
 		public void Select(TableView _, int row)
 		{
-			SelectedRequest = SongRequestManager.Instance.SongQueueService.RequestQueue[row];
+			SelectedRequest = _songQueueService.RequestQueue[row];
 			NotifyPropertyChanged(nameof(IsRequestSelected));
 		}
 
@@ -43,7 +52,7 @@ namespace SongRequestManager.UI
 		[UIAction("skip-button-click")]
 		internal void Skip()
 		{
-			SongRequestManager.Instance.SongQueueService.Skip(SelectedRequest);
+			_songQueueService.Skip(SelectedRequest);
 		}
 
 		[UIAction("play-button-click")]
@@ -63,15 +72,15 @@ namespace SongRequestManager.UI
 				LoadingProgressModal.LoadingProgressModal.instance.ShowDialog(gameObject, progress, () => cts.Cancel());
 
 				// Download song if required and mark as "played"
-				await SongRequestManager.Instance.SongQueueService.Play(SelectedRequest, cts.Token, progress).ConfigureAwait(false);
+				await _songQueueService.Play(SelectedRequest, cts.Token, progress).ConfigureAwait(false);
 
 				await UnityMainThreadTaskScheduler.Factory.StartNew(() =>
 				{
 					// Select song in list
-					StartCoroutine(SongListUtils.ScrollToLevel(SelectedRequest.BeatMap.Hash.ToUpper(), b => { }, true));
+					StartCoroutine(_songListUtils.ScrollToLevel(SelectedRequest.BeatMap.Hash.ToUpper(), b => { }, true));
 
 					// Navigate back
-					Resources.FindObjectsOfTypeAll<SongRequestsFlowController>().FirstOrDefault().Dismiss();
+					DismissRequested?.Invoke();
 				}, cts.Token).ConfigureAwait(false);
 			}
 			catch (OperationCanceledException)
@@ -101,7 +110,7 @@ namespace SongRequestManager.UI
 		[UIAction("queue-button-click")]
 		internal void ToggleQueueState()
 		{
-			var newState = SongRequestManager.Instance.SongQueueService.ToggleQueue();
+			var newState = _songQueueService.ToggleQueue();
 			Logger.Log($"Queue state button clicked. Open: {newState.ToString()}");
 
 			SetQueueButtonState();
@@ -110,6 +119,8 @@ namespace SongRequestManager.UI
 		[UIAction("#post-parse")]
 		public async Task Setup()
 		{
+			SetQueueButtonState();
+
 			if (customListTableData == null)
 			{
 				Logger.Log("SETUP => SKIPPED");
@@ -118,8 +129,8 @@ namespace SongRequestManager.UI
 			}
 
 			customListTableData.data.Clear();
-			var thumbnailLoadingTasks = new List<Task>(SongRequestManager.Instance.SongQueueService.RequestQueue.Count);
-			foreach (var request in SongRequestManager.Instance.SongQueueService.RequestQueue)
+			var thumbnailLoadingTasks = new List<Task>(_songQueueService.RequestQueue.Count);
+			foreach (var request in _songQueueService.RequestQueue)
 			{
 				var cellInfo = ConvertToCellInfo(request);
 				customListTableData.data.Add(cellInfo);
@@ -127,7 +138,7 @@ namespace SongRequestManager.UI
 				thumbnailLoadingTasks.Add(await UnityMainThreadTaskScheduler.Factory.StartNew(() => LoadThumbnailAsync(cellInfo, request)));
 			}
 
-			SongRequestManager.Instance.SongQueueService.RequestQueue.CollectionChanged += RequestQueueOnCollectionChanged;
+			_songQueueService.RequestQueue.CollectionChanged += RequestQueueOnCollectionChanged;
 
 			await UnityMainThreadTaskScheduler.Factory.StartNew(() => customListTableData.tableView.ReloadData());
 
@@ -139,7 +150,7 @@ namespace SongRequestManager.UI
 
 		private void SetQueueButtonState()
 		{
-			var queueOpen = SongRequestManager.Instance.SongQueueService.QueueOpen;
+			var queueOpen = _songQueueService.QueueOpen;
 			QueueButtonColorFace = QueueButtonColorGlow = QueueButtonColorStroke = ButtonColorValueConverter.Convert(queueOpen);
 			QueueButtonText = queueOpen ? "Queue Open" : "Queue Closed";
 
@@ -162,7 +173,7 @@ namespace SongRequestManager.UI
 				switch (e.Action)
 				{
 					case NotifyCollectionChangedAction.Add:
-						var addRequest = SongRequestManager.Instance.SongQueueService.RequestQueue[e.NewStartingIndex];
+						var addRequest = _songQueueService.RequestQueue[e.NewStartingIndex];
 						var addCellInfo = ConvertToCellInfo(addRequest);
 						await LoadThumbnailAsync(addCellInfo, addRequest).ConfigureAwait(false);
 						customListTableData.data.Insert(e.NewStartingIndex, addCellInfo);
@@ -171,7 +182,7 @@ namespace SongRequestManager.UI
 						customListTableData.data.RemoveAt(e.OldStartingIndex);
 						break;
 					case NotifyCollectionChangedAction.Replace:
-						var replaceRequest = SongRequestManager.Instance.SongQueueService.RequestQueue[e.OldStartingIndex];
+						var replaceRequest = _songQueueService.RequestQueue[e.OldStartingIndex];
 						var replaceCellInfo = ConvertToCellInfo(replaceRequest);
 						await LoadThumbnailAsync(replaceCellInfo, replaceRequest).ConfigureAwait(false);
 						customListTableData.data[e.OldStartingIndex] = replaceCellInfo;
