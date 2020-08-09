@@ -1,26 +1,28 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using IPA.Loader;
 using IPA.Utilities;
+using Zenject;
 
 namespace SongRequestManager.Utilities
 {
-	internal static class PluginUtils
+	public class PluginUtils : IInitializable, IDisposable
 	{
-		public static bool SongBrowserEnabled { get; set; }
+		internal bool SongBrowserEnabled { get; set; }
 
-		internal static void Setup()
+		public void Initialize()
 		{
 			RegisterPluginChangeListeners();
 
 			SongBrowserEnabled = PluginManager.EnabledPlugins.Any(x => x.Id == "SongBrowser");
 		}
 
-		internal static void Cleanup()
+		public void Dispose()
 		{
 			UnregisterPluginChangeListeners();
 		}
 
-		internal static void RegisterPluginChangeListeners()
+		private void RegisterPluginChangeListeners()
 		{
 			PluginManager.PluginEnabled -= OnPluginEnabled;
 			PluginManager.PluginEnabled += OnPluginEnabled;
@@ -29,14 +31,14 @@ namespace SongRequestManager.Utilities
 			PluginManager.PluginDisabled += OnPluginDisabled;
 		}
 
-		internal static void UnregisterPluginChangeListeners()
+		private void UnregisterPluginChangeListeners()
 		{
 			PluginManager.PluginEnabled -= OnPluginEnabled;
 
 			PluginManager.PluginDisabled -= OnPluginDisabled;
 		}
 
-		private static void OnPluginEnabled(PluginMetadata plugin, bool needsRestart)
+		private void OnPluginEnabled(PluginMetadata plugin, bool needsRestart)
 		{
 			if (needsRestart)
 			{
@@ -51,7 +53,7 @@ namespace SongRequestManager.Utilities
 			}
 		}
 
-		private static void OnPluginDisabled(PluginMetadata plugin, bool needsRestart)
+		private void OnPluginDisabled(PluginMetadata plugin, bool needsRestart)
 		{
 			if (needsRestart)
 			{
@@ -66,13 +68,20 @@ namespace SongRequestManager.Utilities
 			}
 		}
 
+		internal void DisableSongBrowserFilters()
+		{
+			if (SongBrowserEnabled)
+			{
+				DisableSongBrowserFiltersInternal();
+			}
+		}
+
 		/// <remarks>
 		///	Check whether SongBrowser is enabled before invoking this method.
 		/// If not, and SongBrowser isn't installed, it will result in a FileNotFoundException.
 		/// </remarks>
-		public static void DisableSongBrowserFilters()
+		private static void DisableSongBrowserFiltersInternal()
 		{
-
 			var songBrowserUi = SongBrowser.SongBrowserApplication.Instance.GetField<SongBrowser.UI.SongBrowserUI, SongBrowser.SongBrowserApplication>("_songBrowserUI");
 			if (songBrowserUi)
 			{

@@ -16,6 +16,8 @@ namespace SongRequestManager.Installers
 			{
 				Logger.Log($"Running {nameof(InstallBindings)} of {nameof(AppInstaller)}");
 
+				Logger.Log($"Binding {nameof(PluginUtils)}");
+				Container.BindInterfacesAndSelfTo<PluginUtils>().AsSingle().NonLazy();
 				Logger.Log($"Binding {nameof(BeatSaverService)}");
 				Container.BindInterfacesAndSelfTo<BeatSaverService>().AsSingle().NonLazy();
 				Logger.Log($"Binding {nameof(ChatHandlerService)}");

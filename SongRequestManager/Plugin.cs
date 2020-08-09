@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using BeatSaberMarkupLanguage.Settings;
 using IPA;
 using IPA.Config.Stores;
@@ -7,7 +6,6 @@ using IPA.Loader;
 using SemVer;
 using SongRequestManager.Extensions;
 using SongRequestManager.Settings;
-using SongRequestManager.Utilities;
 using SongRequestManager.UI;
 using UnityEngine;
 using Config = IPA.Config.Config;
@@ -45,7 +43,6 @@ namespace SongRequestManager
 			SiraUtil.Zenject.Installer.RegisterAppInstaller<Installers.AppInstaller>();
 			SiraUtil.Zenject.Installer.RegisterMenuInstaller<Installers.MenuInstaller>();
 
-			PluginUtils.Setup();
 			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnLateMenuSceneLoadedFresh;
 
 			BSMLSettings.instance.AddSettingsMenu("SRM (Alpha)", "SongRequestManager.Settings.Settings.bsml", _settingsController ??= new SettingsController());
@@ -54,8 +51,6 @@ namespace SongRequestManager
 		[OnDisable]
 		public void OnDisable()
 		{
-			PluginUtils.Cleanup();
-
 			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh -= OnLateMenuSceneLoadedFresh;
 
 			BSMLSettings.instance.RemoveSettingsMenu(_settingsController);
