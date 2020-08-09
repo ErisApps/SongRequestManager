@@ -13,7 +13,7 @@ namespace SongRequestManager.Utilities
 		{
 			if (SRMConfig.Instance.GeneralSettings.MinimumLogLevel.HasFlag((LogLevel) level))
 			{
-				LogInstance?.Info($"{Path.GetFileName(file)}->{member}({line}): {text}");
+				LogInstance?.Log(level,$"{Path.GetFileName(file)}->{member}({line}): {text}");
 			}
 		}
 	}
