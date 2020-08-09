@@ -68,11 +68,6 @@ namespace SongRequestManager.Settings
 		[UIValue("mod-full-rights")]
 		public bool TwitchModFullRights { get; set; }
 
-		// ============== Mixer ============== //
-
-		[UIValue("MixerEnabled-bool")]
-		public bool MixerEnabled { get; set; }
-
 		[UIAction("#apply")]
 		public void OnApply() => Logger.Log($"prefix-string applied, now: {Prefix}");
 
