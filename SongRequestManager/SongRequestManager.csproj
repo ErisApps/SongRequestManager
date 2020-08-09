@@ -86,6 +86,15 @@
         <Reference Include="SongBrowser">
             <HintPath>$(GameDirPath)Plugins\SongBrowser.dll</HintPath>
         </Reference>
+        <Reference Include="Zenject">
+            <HintPath>$(GameDirPath)Beat Saber_Data\Managed\Zenject.dll</HintPath>
+        </Reference>
+        <Reference Include="Zenject-usage">
+            <HintPath>$(GameDirPath)Beat Saber_Data\Managed\Zenject-usage.dll</HintPath>
+        </Reference>
+        <Reference Include="SiraUtil">
+            <HintPath>$(GameDirPath)Plugins\SiraUtil.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Commands\ICommand.cs" />
@@ -123,18 +132,14 @@
         <Compile Include="Utilities\Logger.cs" />
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="manifest.json" />
-      <EmbeddedResource Include="Settings\Settings.bsml" />
-      <EmbeddedResource Include="UI\SongRequestsListViewController.bsml" />
+        <EmbeddedResource Include="manifest.json" />
+        <EmbeddedResource Include="Settings\Settings.bsml" />
+        <EmbeddedResource Include="UI\SongRequestsListViewController.bsml" />
+        <EmbeddedResource Include="UI\SongRequestsButton.bsml" />
+        <EmbeddedResource Include="UI\LoadingProgressModal\LoadingProgressModal.bsml" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="UI\SongRequestsButton.bsml" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="UI\LoadingProgressModal\LoadingProgressModal.bsml" />
+        <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
