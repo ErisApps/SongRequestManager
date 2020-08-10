@@ -7,13 +7,13 @@
         <tab tags='settings-tab' tab-name='General'>
             <scrollable-settings-container child-control-height='false' child-expand-height='false' child-align='UpperCenter'>
                 <string-setting text='Prefix' value='prefix-string'/>
-                <dropdown-list-setting text='Minimum log level' value='loglevel-choice' choices='loglevel-options' />
+                <dropdown-list-setting text='Minimum log level' value='loglevel-choice' choices='loglevel-options'/>
             </scrollable-settings-container>
         </tab>
 
         <tab tags='settings-tab' tab-name='Twitch'>
             <scrollable-settings-container child-control-height='false' child-expand-height='false' child-align='UpperCenter'>
-                <bool-setting text='Enabled' value='TwitchEnabled-bool'/>
+                <bool-setting text='Enabled' value='twitchenabled-bool'/>
             </scrollable-settings-container>
         </tab>
     </bg>

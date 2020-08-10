@@ -46,7 +46,7 @@ namespace SongRequestManager.Settings
 
 		// ============== Twitch ============== //
 
-		[UIValue("TwitchEnabled-bool")]
+		[UIValue("twitchenabled-bool")]
 		public bool TwitchEnabled
 		{
 			get => SRMConfig.Instance.TwitchSettings.Enabled;
