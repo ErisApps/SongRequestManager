@@ -45,8 +45,8 @@ namespace SongRequestManager.UI
 			SongRequestsFlowCoordinator songRequestsFlowCoordinator)
 		{
 			Logger.Log("SRMBUTTON construct invoked");
-			_levelSelectionFlowCoordinator = levelSelectionFlowCoordinator;
 			_standardLevelDetailViewController = standardLevelDetailViewController;
+			_levelSelectionFlowCoordinator = levelSelectionFlowCoordinator;
 			_songRequestsFlowCoordinator = songRequestsFlowCoordinator;
 			_songQueueService = songQueueService;
 		}
