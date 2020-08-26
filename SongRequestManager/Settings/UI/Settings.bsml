@@ -7,7 +7,6 @@
         <tab tags='settings-tab' tab-name='General'>
             <scrollable-settings-container child-control-height='false' child-expand-height='false' child-align='UpperCenter'>
                 <string-setting text='Prefix' value='prefix-string'/>
-                <dropdown-list-setting text='Minimum log level' value='loglevel-choice' choices='loglevel-options'/>
             </scrollable-settings-container>
         </tab>
 
