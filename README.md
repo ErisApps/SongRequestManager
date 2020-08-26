@@ -3,12 +3,11 @@ A fairly simple, from the ground up re-implementation of Song Request Manager th
 
 ## Installation
 This mod requires a few other mods in order to work.
-- BS Utils v1.4.9 or higher
-- BeatSaberMarkupLanguage v1.3.2 or higher
-- BeatSaverSharp v1.5.2 or higher
-- SongCore v2.9.6 or higher
-- ChatCore v1.0.0-rc5 or higher ([it's not yet available on beatmods/modassistant, so grab it here](https://github.com/brian91292/ChatCore/releases))
-- SiraUtil v0.1.1 or higher
+- BeatSaberMarkupLanguage v1.3.4 or higher
+- BeatSaverSharp v1.6.0 or higher
+- SongCore v2.9.11 or higher
+- ChatCore v1.0.0 or higher
+- SiraUtil v0.2.0 or higher
 
 Installation is fairly simple.
 1. Grab the latest plugin release from the [releases page](https://github.com/ErisApps/SongRequestManager/releases) (once there is a release)
