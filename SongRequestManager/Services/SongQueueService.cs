@@ -20,7 +20,7 @@ namespace SongRequestManager.Services
 		public SongQueueService(BeatSaverService beatSaverService)
 		{
 			_beatSaverService = beatSaverService;
-			RequestQueue = new ObservableCollection<Request>(SRMConfig.Instance.QueueData.Select(x =>
+			RequestQueue = new ObservableCollection<Request>(SRMRequests.Instance.QueueData.Select(x =>
 			{
 				x.BeatMap.SetProperty("Client", _beatSaverService.BeatSaverSharpInstance);
 
@@ -69,9 +69,12 @@ namespace SongRequestManager.Services
 				request.Status = RequestStatus.Queued;
 				request.BeatMap = beatMap;
 
-				RequestQueue.Add(request);
-				SRMConfig.Instance.QueueData.Add(request);
-				SRMConfig.Instance.Changed();
+				using (SRMRequests.Instance.ChangeTransaction)
+				{
+					RequestQueue.Add(request);
+					SRMRequests.Instance.QueueData.Add(request);
+					SRMRequests.Instance.Changed();
+				}
 
 				Logger.Log("Added request");
 			}
@@ -129,23 +132,25 @@ namespace SongRequestManager.Services
 
 			request.Status = RequestStatus.Played;
 
-			RequestQueue.Remove(request);
-			SRMConfig.Instance.QueueData.Remove(request);
-			SRMConfig.Instance.HistoryData.Insert(0, request);
-			if (SRMConfig.Instance.HistoryData.Count > 50)
+			using (SRMRequests.Instance.ChangeTransaction)
 			{
-				SRMConfig.Instance.HistoryData.RemoveRange(50, SRMConfig.Instance.HistoryData.Count - 50);
+				RequestQueue.Remove(request);
+				SRMRequests.Instance.QueueData.Remove(request);
+				SRMRequests.Instance.HistoryData.Insert(0, request);
+				if (SRMRequests.Instance.HistoryData.Count > 50)
+				{
+					SRMRequests.Instance.HistoryData.RemoveRange(50, SRMRequests.Instance.HistoryData.Count - 50);
+				}
 			}
-
-			SRMConfig.Instance.Changed();
 		}
 
 		public void Skip(Request request)
 		{
-			RequestQueue.Remove(request);
-			SRMConfig.Instance.QueueData.Remove(request);
-
-			SRMConfig.Instance.Changed();
+			using (SRMRequests.Instance.ChangeTransaction)
+			{
+				RequestQueue.Remove(request);
+				SRMRequests.Instance.QueueData.Remove(request);
+			}
 		}
 
 		private void RequestQueueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

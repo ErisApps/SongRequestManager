@@ -113,12 +113,15 @@
         <Compile Include="Services\CommandManager.cs" />
         <Compile Include="Services\SongQueueService.cs" />
         <Compile Include="Services\UserRequestTrackerManager.cs" />
+        <Compile Include="Settings\Base\BaseConfig.cs" />
+        <Compile Include="Settings\Base\ReloadableBaseConfig.cs" />
         <Compile Include="Settings\Converters\BeatMapConfigConverter.cs" />
         <Compile Include="Settings\Converters\DateTimeConfigConverter.cs" />
         <Compile Include="Settings\Converters\EnumStringConfigConverter.cs" />
         <Compile Include="Settings\Partial\GeneralSettings.cs" />
         <Compile Include="Settings\Partial\TwitchSettings.cs" />
         <Compile Include="Settings\SRMConfig.cs" />
+        <Compile Include="Settings\SRMRequests.cs" />
         <Compile Include="Settings\UI\SettingsController.cs" />
         <Compile Include="UI\LoadingProgressModal\LoadingProgressModal.cs" />
         <Compile Include="UI\SongRequestsButtonViewController.cs" />

@@ -6,6 +6,7 @@ using IPA.Loader;
 using SemVer;
 using SongRequestManager.Extensions;
 using SongRequestManager.Settings;
+using SongRequestManager.Settings.Base;
 using SongRequestManager.Settings.UI;
 using Config = IPA.Config.Config;
 using Logger = SongRequestManager.Utilities.Logger;
@@ -25,11 +26,11 @@ namespace SongRequestManager
 		public static Version Version => _version ??= _metadata?.Version ?? Assembly.GetExecutingAssembly().GetName().Version.ToSemVerVersion();
 
 		[Init]
-		public void Init([Config.Name("SongRequestManager")] Config config, IPA.Logging.Logger logger, PluginMetadata metaData)
+		public void Init(IPA.Logging.Logger logger, PluginMetadata metaData)
 		{
-			SRMConfig.Instance = config.Generated<SRMConfig>();
-
 			Logger.LogInstance = logger;
+
+			InitialiseConfigs();
 
 			_metadata = metaData;
 		}
@@ -51,6 +52,20 @@ namespace SongRequestManager
 
 			SiraUtil.Zenject.Installer.UnregisterMenuInstaller<Installers.MenuInstaller>();
 			SiraUtil.Zenject.Installer.UnregisterAppInstaller<Installers.AppInstaller>();
+		}
+
+		private static void InitialiseConfigs()
+		{
+			InitialiseConfig<SRMConfig>("Settings");
+			InitialiseConfig<SRMRequests>("Requests");
+		}
+
+		private static void InitialiseConfig<T>(string configName) where T : BaseConfig<T>
+		{
+			BaseConfig<T>.Instance = Config
+				.GetConfigFor($"{nameof(SongRequestManager)} - {configName}")
+				.Generated<T>();
+			BaseConfig<T>.Instance.Changed();
 		}
 	}
 }
