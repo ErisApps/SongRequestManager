@@ -4,7 +4,7 @@
 	"name": "Song Request Manager",
 	"description": "Let your viewers request songs by using chat commands.",
 	"author": "Eris",
-	"gameVersion": "1.8.0",
+	"gameVersion": "1.11.0",
 	"version": "2.0.0-alpha1",
 	"dependsOn": {
 		"SiraUtil": "^0.2.0",
