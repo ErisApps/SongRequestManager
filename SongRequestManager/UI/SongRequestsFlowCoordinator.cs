@@ -1,8 +1,8 @@
 ﻿using System;
 using BeatSaberMarkupLanguage;
 using HMUI;
+using SongRequestManager.Utilities;
 using Zenject;
-using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.UI
 {

@@ -19,13 +19,14 @@ using Logger = SongRequestManager.Utilities.Logger;
 namespace SongRequestManager.UI
 {
 	[HotReload]
+	[ViewDefinition("SongRequestManager.UI.Views.SongRequestsListView.bsml")]
 	public class SongRequestsListViewController : BSMLAutomaticViewController
 	{
 		private SongQueueService _songQueueService;
 		private SongListUtils _songListUtils;
 
 		private Request SelectedRequest;
-		
+
 		public event Action DismissRequested;
 
 		[Inject]
