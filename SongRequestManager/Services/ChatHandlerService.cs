@@ -4,8 +4,8 @@ using ChatCore;
 using ChatCore.Interfaces;
 using ChatCore.Services.Twitch;
 using SongRequestManager.Settings;
+using SongRequestManager.Utilities;
 using Zenject;
-using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.Services
 {
@@ -26,7 +26,7 @@ namespace SongRequestManager.Services
 		{
 			// ChatCore setup
 			_chatCore = ChatCoreInstance.Create();
-			
+
 			if (_chatCore != null)
 			{
 				if (SRMConfig.Instance.TwitchSettings.Enabled)

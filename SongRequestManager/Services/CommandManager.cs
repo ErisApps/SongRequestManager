@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SongRequestManager.Commands;
-using Logger = SongRequestManager.Utilities.Logger;
+using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Services
 {

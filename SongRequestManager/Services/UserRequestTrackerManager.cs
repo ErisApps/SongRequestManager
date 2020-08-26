@@ -16,6 +16,5 @@ namespace SongRequestManager.Services
 		public void IncrementRequest(string userId)
 		{
 		}
-		
 	}
 }

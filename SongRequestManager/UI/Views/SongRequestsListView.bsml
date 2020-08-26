@@ -1,60 +1,65 @@
 <bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 
-    <horizontal pad-top='12'
-                pad-bottom='12'
-                spacing='1'>
-        <div/>
-        <vertical spacing='1'>
-            <page-button direction='Up'
-                         event-click='requestsList#PageUp'/>
-            <list id='requestsList'
-                  expand-cell='true'
-                  select-cell='selectRequest'/>
-            <page-button direction='Down'
-                         event-click='requestsList#PageDown'/>
-        </vertical>
-        <vertical vertical-fit='Unconstrained'
-                  preferred-height='50'
-                  child-align='MiddleCenter'
-                  child-expand-height='false'
-                  child-control-height='true'
-                  spacing='0'>
-            <vertical>
-                <button pref-width='28'
-                        word-wrapping='false'
-                        child-align='UpperCenter'
-                        text='History'
-                        interactable='false'/>
-            </vertical>
-            <button pref-width='28'
-                    word-wrapping='false'
-                    text='Skip'
-                    stroke-color='#aaa'
-                    face-color='#ccc'
-                    child-align='MiddleCenter'
-                    interactable='~is-request-selected'
-                    on-click='skip-button-click'/>
-            <button pref-width='28'
-                    word-wrapping='false'
-                    text='Ban'
-                    interactable='false'/>
-            <button pref-width='28'
-                    word-wrapping='false'
-                    text='Play'
-                    interactable='~is-request-selected'
-                    on-click='play-button-click'/>
-            <vertical>
-                <button id='queue-button'
-                        word-wrapping='false'
-                        pref-width='28'
-                        child-align='LowerCenter'
-                        text='~queue-button-text'
-                        face-color='~queue-button-color-face'
-                        glow-color='~queue-button-color-glow'
-                        stroke-color='~queue-button-color-stroke'
-                        on-click='queue-button-click'/>
-            </vertical>
-        </vertical>
-    </horizontal>
+	<horizontal pad-top='12'
+				pad-bottom='12'
+				spacing='1'>
+		<div/>
+
+		<vertical spacing='1'>
+			<page-button direction='Up'
+						 event-click='requestsList#PageUp'/>
+			<list id='requestsList'
+				  expand-cell='true'
+				  select-cell='selectRequest'/>
+			<page-button direction='Down'
+						 event-click='requestsList#PageDown'/>
+		</vertical>
+
+		<vertical vertical-fit='Unconstrained'
+				  preferred-height='50'
+				  child-align='MiddleCenter'
+				  child-expand-height='false'
+				  child-control-height='true'
+				  spacing='0'>
+
+			<vertical>
+				<button pref-width='28'
+						word-wrapping='false'
+						child-align='UpperCenter'
+						text='History'
+						interactable='false'/>
+			</vertical>
+
+			<button pref-width='28'
+					word-wrapping='false'
+					text='Skip'
+					stroke-color='#aaa'
+					face-color='#ccc'
+					child-align='MiddleCenter'
+					interactable='~is-request-selected'
+					on-click='skip-button-click'/>
+			<button pref-width='28'
+					word-wrapping='false'
+					text='Ban'
+					interactable='false'/>
+			<button pref-width='28'
+					word-wrapping='false'
+					text='Play'
+					interactable='~is-request-selected'
+					on-click='play-button-click'/>
+
+			<vertical>
+				<button id='queue-button'
+						word-wrapping='false'
+						pref-width='28'
+						child-align='LowerCenter'
+						text='~queue-button-text'
+						face-color='~queue-button-color-face'
+						glow-color='~queue-button-color-glow'
+						stroke-color='~queue-button-color-stroke'
+						on-click='queue-button-click'/>
+			</vertical>
+		</vertical>
+	</horizontal>
 </bg>
