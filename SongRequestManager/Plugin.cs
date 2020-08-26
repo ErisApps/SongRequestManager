@@ -6,6 +6,7 @@ using IPA.Loader;
 using SemVer;
 using SongRequestManager.Extensions;
 using SongRequestManager.Settings;
+using SongRequestManager.Settings.UI;
 using Config = IPA.Config.Config;
 using Logger = SongRequestManager.Utilities.Logger;
 
@@ -38,8 +39,8 @@ namespace SongRequestManager
 		{
 			SiraUtil.Zenject.Installer.RegisterAppInstaller<Installers.AppInstaller>();
 			SiraUtil.Zenject.Installer.RegisterMenuInstaller<Installers.MenuInstaller>();
-			
-			BSMLSettings.instance.AddSettingsMenu("SRM (Alpha)", "SongRequestManager.Settings.Settings.bsml", _settingsController ??= new SettingsController());
+
+			BSMLSettings.instance.AddSettingsMenu("SRM (Alpha)", "SongRequestManager.Settings.UI.Settings.bsml", _settingsController ??= new SettingsController());
 		}
 
 		[OnDisable]

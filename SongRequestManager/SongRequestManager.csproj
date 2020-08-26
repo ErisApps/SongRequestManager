@@ -116,10 +116,10 @@
         <Compile Include="Settings\Converters\BeatMapConfigConverter.cs" />
         <Compile Include="Settings\Converters\DateTimeConfigConverter.cs" />
         <Compile Include="Settings\Converters\EnumStringConfigConverter.cs" />
-        <Compile Include="Settings\SettingsController.cs" />
         <Compile Include="Settings\Partial\GeneralSettings.cs" />
         <Compile Include="Settings\Partial\TwitchSettings.cs" />
         <Compile Include="Settings\SRMConfig.cs" />
+        <Compile Include="Settings\UI\SettingsController.cs" />
         <Compile Include="UI\LoadingProgressModal\LoadingProgressModal.cs" />
         <Compile Include="UI\SongRequestsButtonViewController.cs" />
         <Compile Include="UI\SongRequestsFlowCoordinator.cs" />
@@ -132,9 +132,9 @@
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="manifest.json" />
-        <EmbeddedResource Include="Settings\Settings.bsml" />
         <EmbeddedResource Include="UI\SongRequestsListViewController.bsml" />
         <EmbeddedResource Include="UI\SongRequestsButton.bsml" />
+        <EmbeddedResource Include="Settings\UI\Settings.bsml" />
         <EmbeddedResource Include="UI\LoadingProgressModal\LoadingProgressModal.bsml" />
     </ItemGroup>
     <ItemGroup>

@@ -5,7 +5,7 @@ using BeatSaberMarkupLanguage.Notify;
 using UnityEngine;
 using Logger = SongRequestManager.Utilities.Logger;
 
-namespace SongRequestManager.Settings
+namespace SongRequestManager.Settings.UI
 {
 	public class SettingsController : INotifiableHost
 	{
