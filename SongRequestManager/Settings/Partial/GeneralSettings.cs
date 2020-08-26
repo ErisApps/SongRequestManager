@@ -2,7 +2,7 @@
 using IPA.Logging;
 using SongRequestManager.Settings.Converters;
 
-namespace SongRequestManager.Settings
+namespace SongRequestManager.Settings.Partial
 {
 	internal class GeneralSettings
 	{

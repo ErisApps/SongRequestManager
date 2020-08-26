@@ -1,4 +1,4 @@
-﻿namespace SongRequestManager.Settings
+﻿namespace SongRequestManager.Settings.Partial
 {
 	internal class TwitchSettings
 	{

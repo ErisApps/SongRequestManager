@@ -4,6 +4,7 @@ using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
 using SongRequestManager.Models;
+using SongRequestManager.Settings.Partial;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 namespace SongRequestManager.Settings
