@@ -59,9 +59,6 @@
         <Reference Include="SemVer">
             <HintPath>$(GameDirPath)Libs\SemVer.dll</HintPath>
         </Reference>
-        <Reference Include="BS_Utils">
-            <HintPath>$(GameDirPath)Plugins\BS_Utils.dll</HintPath>
-        </Reference>
         <Reference Include="HMLib">
             <HintPath>$(GameDirPath)Beat Saber_Data\Managed\HMLib.dll</HintPath>
         </Reference>
