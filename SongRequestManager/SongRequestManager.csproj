@@ -150,6 +150,8 @@
     <Target Name="CopyToPlugins" AfterTargets="AfterBuild">
         <Message Text="Copying $(OutDir)SongRequestManager.dll to Plugins folder" Importance="high" />
         <Copy SourceFiles="$(OutDir)SongRequestManager.dll" DestinationFiles="$(GameDirPath)Plugins\SongRequestManager.dll" />
+		<Message Text="Copying $(OutDir)SongRequestManager.pdb to Plugins folder" Importance="high" />
+		<Copy SourceFiles="$(OutDir)SongRequestManager.pdb" DestinationFiles="$(GameDirPath)Plugins\SongRequestManager.pdb" />
     </Target>
 
 </Project>
