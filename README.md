@@ -14,6 +14,15 @@ Installation is fairly simple.
 2. Drop the .dll file in the Plugins folder of your Beat Saber installation.
 3. Boot it up (or reboot)
 
+## Usage
+All commands listed below use the prefix `!` by default. This can be  changed in the (in-game) settings however.
+
+### Basic commands
+| Command | Description | Alias |
+| --- | --- | --- |
+| bsr | Allows you to request a song using the Beatsaver ID. | sr, request |
+
+
 ## Developers
 To build this project you will need to create a `SongRequestManager/SongRequestManager.csproj.user` file specifying where the game is located:
 
