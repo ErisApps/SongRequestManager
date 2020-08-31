@@ -13,9 +13,11 @@ namespace SongRequestManager.Settings
 	[NotifyPropertyChanges]
 	internal class SRMRequests : BaseConfig<SRMRequests>
 	{
+		[NonNullable]
 		[UseConverter(typeof(ListConverter<Request>))]
 		public virtual List<Request> QueueData { get; set; } = new List<Request>();
 
+		[NonNullable]
 		[UseConverter(typeof(ListConverter<Request>))]
 		public virtual List<Request> HistoryData { get; set; } = new List<Request>();
 	}

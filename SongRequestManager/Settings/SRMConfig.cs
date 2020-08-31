@@ -11,7 +11,10 @@ namespace SongRequestManager.Settings
 	[NotifyPropertyChanges]
 	internal class SRMConfig : ReloadableBaseConfig<SRMConfig>
 	{
+		[NonNullable]
 		public virtual GeneralSettings GeneralSettings { get; set; } = new GeneralSettings();
+
+		[NonNullable]
 		public virtual TwitchSettings TwitchSettings { get; set; } = new TwitchSettings();
 	}
 }
