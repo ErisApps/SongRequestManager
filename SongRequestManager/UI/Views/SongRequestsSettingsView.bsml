@@ -22,7 +22,7 @@
 
 		<tab tags='settings-tab' tab-name='Twitch'>
 			<vertical background="round-rect-panel" horizontal-fit="Unconstrained" pad="4" child-control-height="true" child-expand-height="false" spacing="1">
-				<text text="Not implemented yet !" color="yellow" align="Center"/>
+				<text text="Not implemented yet !" color="yellow" align="Center" all-uppercase="true"/>
 				<slider-setting text='User Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='50' increment='1' integer-only='true' apply-on-change="true"
 								bind-value="true"/>
 				<slider-setting text='Sub Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='50' increment='1' integer-only='true' apply-on-change="true"
@@ -37,7 +37,7 @@
 		<tab tags='settings-tab' tab-name='Filters'>
 			<bg>
 				<vertical background="round-rect-panel" horizontal-fit="Unconstrained" pad="4" child-control-height="true" child-expand-height="false" spacing="1">
-					<text text="Untested stuffs !" color="yellow" align="Center"/>
+					<text text="Untested stuffs !" color="yellow" align="Center" all-uppercase="true"/>
 					<slider-setting text='Minimum rating' hover-hint="The minimum rating a song has to have." min="0" max="100" integer-only="true" apply-on-change="true" bind-value="true"
 									value="minimum-rating"/>
 					<slider-setting text='Maximum song duration' hover-hint="The maximum allowed duration in seconds. Set to 0 to disable." min="0" max="999" integer-only="true"
