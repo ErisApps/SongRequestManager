@@ -16,5 +16,8 @@ namespace SongRequestManager.Settings
 
 		[NonNullable]
 		public virtual TwitchSettings TwitchSettings { get; set; } = new TwitchSettings();
+
+		[NonNullable]
+		public virtual FilterSettings FilterSettings { get; set; } = new FilterSettings();
 	}
 }

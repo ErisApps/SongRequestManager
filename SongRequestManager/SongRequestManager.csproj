@@ -114,6 +114,7 @@
         <Compile Include="Settings\Base\ReloadableBaseConfig.cs" />
         <Compile Include="Settings\Converters\BeatMapConfigConverter.cs" />
         <Compile Include="Settings\Converters\DateTimeConfigConverter.cs" />
+        <Compile Include="Settings\Partial\FilterSettings.cs" />
         <Compile Include="Settings\Partial\GeneralSettings.cs" />
         <Compile Include="Settings\Partial\TwitchSettings.cs" />
         <Compile Include="Settings\SRMConfig.cs" />
