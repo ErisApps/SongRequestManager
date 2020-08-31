@@ -8,26 +8,26 @@ namespace SongRequestManager.UI
 {
 	public class SongRequestsFlowCoordinator : FlowCoordinator
 	{
-		private SongRequestsListViewController? _songRequestsListView;
+		private SongRequestsListViewController? _songRequestsListViewController;
 		private LevelSelectionFlowCoordinator _levelSelectionFlowCoordinator;
 
 		[Inject]
 		protected void Construct(SongRequestsListViewController songRequestsListViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator)
 		{
+			_songRequestsListViewController = songRequestsListViewController;
 			_levelSelectionFlowCoordinator = levelSelectionFlowCoordinator;
-			_songRequestsListView = songRequestsListViewController;
 		}
 
 		private void Start()
 		{
-			if (_songRequestsListView == null)
+			if (_songRequestsListViewController == null)
 			{
-				Logger.Log($"{nameof(_songRequestsListView)} is null... which is... erm... not allowed I guess?", IPA.Logging.Logger.Level.Warning);
+				Logger.Log($"{nameof(_songRequestsListViewController)} is null... which is... erm... not allowed I guess?", IPA.Logging.Logger.Level.Warning);
 				return;
 			}
 
-			_songRequestsListView.DismissRequested -= SongRequestsListViewOnDismissRequested;
-			_songRequestsListView.DismissRequested += SongRequestsListViewOnDismissRequested;
+			_songRequestsListViewController.DismissRequested -= SongRequestsListViewControllerOnDismissRequested;
+			_songRequestsListViewController.DismissRequested += SongRequestsListViewControllerOnDismissRequested;
 		}
 
 		protected override void DidActivate(bool firstActivation, ActivationType activationType)
@@ -38,7 +38,7 @@ namespace SongRequestManager.UI
 				{
 					title = "Song requests";
 					showBackButton = true;
-					ProvideInitialViewControllers(_songRequestsListView);
+					ProvideInitialViewControllers(_songRequestsListViewController);
 				}
 			}
 			catch (Exception ex)
@@ -55,16 +55,16 @@ namespace SongRequestManager.UI
 
 		private void OnDestroy()
 		{
-			if (_songRequestsListView == null)
+			if (_songRequestsListViewController == null)
 			{
-				Logger.Log($"{nameof(_songRequestsListView)} is null anyways, so yeah... what do you expect me to do?", IPA.Logging.Logger.Level.Warning);
+				Logger.Log($"{nameof(_songRequestsListViewController)} is null anyways, so yeah... what do you expect me to do?", IPA.Logging.Logger.Level.Warning);
 				return;
 			}
 
-			_songRequestsListView.DismissRequested -= SongRequestsListViewOnDismissRequested;
+			_songRequestsListViewController.DismissRequested -= SongRequestsListViewControllerOnDismissRequested;
 		}
 
-		private void SongRequestsListViewOnDismissRequested()
+		private void SongRequestsListViewControllerOnDismissRequested()
 		{
 			BackButtonWasPressed(null!);
 		}
