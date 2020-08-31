@@ -7,6 +7,7 @@ using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.UI
 {
+	// The hotreload attribute requires a build of BSML that includes https://github.com/monkeymanboy/BeatSaberMarkupLanguage/pull/43
 	[HotReload(RelativePathToLayout = @"Views\SongRequestsSettingsView.bsml")]
 	[ViewDefinition("SongRequestManager.UI.Views.SongRequestsSettingsView.bsml")]
 	public class SongRequestsSettingsViewController : BSMLAutomaticViewController
