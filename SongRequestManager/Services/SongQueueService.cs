@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BeatSaverSharp;
 using IPA.Utilities;
 using SongCore;
 using SongRequestManager.Models;
@@ -64,6 +65,12 @@ namespace SongRequestManager.Services
 				return (false, invalidBsrMessage);
 			}
 
+			var filterResult = MatchesFilters(beatMap);
+			if (!filterResult.Item1)
+			{
+				return (false, $"Song doesn't match filter. {filterResult.Item2}");
+			}
+
 			try
 			{
 				request.Status = RequestStatus.Queued;
@@ -85,6 +92,37 @@ namespace SongRequestManager.Services
 			}
 
 			return (true, $"{request.BeatMap.Metadata.SongName} - {request.BeatMap.Metadata.SongAuthorName} was added.");
+		}
+
+		private (bool, string) MatchesFilters(Beatmap beatmap)
+		{
+			var filters = SRMConfig.Instance.FilterSettings;
+			if (filters.MinimumRating > beatmap.Stats.Rating * 100)
+			{
+				return (false, $"The rating of the requested song ({beatmap.Stats.Rating * 100:0.00}%) is lower than the minimum allowed rating of {filters.MinimumRating}%");
+			}
+
+			// Duration has fallback implemented by calculating average song duration according to the various difficulties
+			if (filters.MaximumSongDuration != 0
+			    && (beatmap.Metadata.Duration > 0 && filters.MaximumSongDuration < beatmap.Metadata.Duration
+			        || filters.MaximumSongDuration < beatmap.Metadata
+				        .Characteristics
+				        .Average(x => x.Difficulties
+					        .Where(diff => diff.Value != null)
+					        .Average(diff => diff.Value?.Length))))
+			{
+				return (false, $"The duration of the requested song ({beatmap.Metadata.Duration} seconds) is higher than the maximum allowed duration of {filters.MaximumSongDuration} seconds");
+			}
+
+			if (beatmap.Metadata.Characteristics
+				.All(x => x.Difficulties
+					.Where(diff => diff.Value != null)
+					.All(diff => diff.Value?.NoteJumpSpeed < filters.MinimumNjs)))
+			{
+				return (false, $"The requested song didn't have a single difficulty that matched the minimum required NJS value of {filters.MinimumNjs}");
+			}
+
+			return (true, string.Empty);
 		}
 
 		public async Task Play(Request request, CancellationToken cancellationToken, IProgress<double> downloadProgress = null)
