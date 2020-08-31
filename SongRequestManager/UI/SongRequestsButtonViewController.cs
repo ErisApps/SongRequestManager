@@ -65,15 +65,10 @@ namespace SongRequestManager.UI
 
 		protected override void OnDestroy()
 		{
-			Logger.Log("GET REKT!!!");
 			if (_songQueueService != null)
 			{
 				_songQueueService.RequestQueue.CollectionChanged -= OnRequestQueueChanged;
 			}
-		}
-
-		public void Dispose()
-		{
 		}
 
 		private void OnRequestQueueChanged(object sender, NotifyCollectionChangedEventArgs e)
