@@ -11,6 +11,7 @@ using IPA.Utilities.Async;
 using SongRequestManager.Converters;
 using SongRequestManager.Models;
 using SongRequestManager.Services;
+using SongRequestManager.Settings;
 using SongRequestManager.Utilities;
 using UnityEngine;
 using Zenject;
@@ -122,6 +123,8 @@ namespace SongRequestManager.UI
 		{
 			SetQueueButtonState();
 
+			SRMConfig.Instance.ConfigChanged += OnConfigChanged;
+
 			if (customListTableData == null)
 			{
 				Logger.Log("SETUP => SKIPPED");
@@ -147,6 +150,17 @@ namespace SongRequestManager.UI
 			await UnityMainThreadTaskScheduler.Factory.StartNew(() => customListTableData.tableView.RefreshCells(true, true));
 
 			Logger.Log("SETUP => Finished");
+		}
+
+		protected override void OnDestroy()
+		{
+			base.OnDestroy();
+			SRMConfig.Instance.ConfigChanged -= OnConfigChanged;
+		}
+
+		private void OnConfigChanged(object sender, EventArgs e)
+		{
+			SetQueueButtonState();
 		}
 
 		private void SetQueueButtonState()
