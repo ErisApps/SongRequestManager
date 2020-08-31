@@ -124,6 +124,7 @@
         <Compile Include="UI\SongRequestsButtonViewController.cs" />
         <Compile Include="UI\SongRequestsFlowCoordinator.cs" />
         <Compile Include="UI\SongRequestsListViewController.cs" />
+        <Compile Include="UI\SongRequestsSettingsViewController.cs" />
         <Compile Include="Utilities\PluginUtils.cs" />
         <Compile Include="Utilities\SongCoreUtils.cs" />
         <Compile Include="Utilities\SongListUtils.cs" />
@@ -136,6 +137,7 @@
         <EmbeddedResource Include="UI\LoadingProgressModal\LoadingProgressModal.bsml" />
         <EmbeddedResource Include="UI\Views\SongRequestsButtonView.bsml" />
         <EmbeddedResource Include="UI\Views\SongRequestsListView.bsml" />
+        <EmbeddedResource Include="UI\Views\SongRequestsSettingsView.bsml" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />

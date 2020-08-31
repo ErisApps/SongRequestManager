@@ -18,11 +18,13 @@ namespace SongRequestManager.Installers
 			Logger.Log($"Running {nameof(InstallBindings)} of {nameof(MenuInstaller)}");
 
 			var songRequestsListViewController = BeatSaberUI.CreateViewController<SongRequestsListViewController>();
+			var songRequestsSettingsViewController = BeatSaberUI.CreateViewController<SongRequestsSettingsViewController>();
 			var songRequestsFlowCoordinator = BeatSaberUI.CreateFlowCoordinator<SongRequestsFlowCoordinator>();
 			var songRequestsButtonViewController = BeatSaberUI.CreateViewController<SongRequestsButtonViewController>();
 
 			Container.Bind<SongListUtils>().ToSelf().AsSingle().NonLazy();
 			Container.InjectSpecialInstance<SongRequestsListViewController>(songRequestsListViewController);
+			Container.InjectSpecialInstance<SongRequestsSettingsViewController>(songRequestsSettingsViewController);
 			Container.InjectSpecialInstance<SongRequestsFlowCoordinator>(songRequestsFlowCoordinator);
 			Container.InjectSpecialInstance<SongRequestsButtonViewController>(songRequestsButtonViewController);
 

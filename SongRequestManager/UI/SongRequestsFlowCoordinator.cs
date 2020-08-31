@@ -9,11 +9,13 @@ namespace SongRequestManager.UI
 	public class SongRequestsFlowCoordinator : FlowCoordinator
 	{
 		private SongRequestsListViewController? _songRequestsListViewController;
+		private SongRequestsSettingsViewController? _songRequestsSettingsViewController;
 		private LevelSelectionFlowCoordinator _levelSelectionFlowCoordinator;
 
 		[Inject]
-		protected void Construct(SongRequestsListViewController songRequestsListViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator)
+		protected void Construct(SongRequestsListViewController songRequestsListViewController, SongRequestsSettingsViewController songRequestsSettingsViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator)
 		{
+			_songRequestsSettingsViewController = songRequestsSettingsViewController;
 			_songRequestsListViewController = songRequestsListViewController;
 			_levelSelectionFlowCoordinator = levelSelectionFlowCoordinator;
 		}
@@ -38,7 +40,7 @@ namespace SongRequestManager.UI
 				{
 					title = "Song requests";
 					showBackButton = true;
-					ProvideInitialViewControllers(_songRequestsListViewController);
+					ProvideInitialViewControllers(_songRequestsListViewController, _songRequestsSettingsViewController);
 				}
 			}
 			catch (Exception ex)
