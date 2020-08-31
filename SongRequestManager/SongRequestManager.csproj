@@ -119,7 +119,6 @@
         <Compile Include="Settings\Partial\TwitchSettings.cs" />
         <Compile Include="Settings\SRMConfig.cs" />
         <Compile Include="Settings\SRMRequests.cs" />
-        <Compile Include="Settings\UI\SettingsController.cs" />
         <Compile Include="UI\LoadingProgressModal\LoadingProgressModal.cs" />
         <Compile Include="UI\SongRequestsButtonViewController.cs" />
         <Compile Include="UI\SongRequestsFlowCoordinator.cs" />
@@ -133,7 +132,6 @@
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="manifest.json" />
-        <EmbeddedResource Include="Settings\UI\Settings.bsml" />
         <EmbeddedResource Include="UI\LoadingProgressModal\LoadingProgressModal.bsml" />
         <EmbeddedResource Include="UI\Views\SongRequestsButtonView.bsml" />
         <EmbeddedResource Include="UI\Views\SongRequestsListView.bsml" />
