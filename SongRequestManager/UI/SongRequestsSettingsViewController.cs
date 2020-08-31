@@ -13,11 +13,18 @@ namespace SongRequestManager.UI
 	public class SongRequestsSettingsViewController : BSMLAutomaticViewController
 	{
 		// ============== General ============= //
-		[UIValue("prefix-string")]
+		[UIValue("command-prefix")]
 		public string Prefix
 		{
 			get => SRMConfig.Instance.GeneralSettings.Prefix;
 			set => SRMConfig.Instance.GeneralSettings.Prefix = value;
+		}
+
+		[UIValue("max-queue-size")]
+		public int MaxQueueSize
+		{
+			get => SRMConfig.Instance.GeneralSettings.MaxQueueSize;
+			set => SRMConfig.Instance.GeneralSettings.MaxQueueSize = value;
 		}
 
 		[UIValue("twitch-integration-enabled")]
@@ -73,6 +80,7 @@ namespace SongRequestManager.UI
 		{
 			Logger.Log("Config changed externally, hopefully refreshing");
 			NotifyPropertyChanged(nameof(Prefix));
+			NotifyPropertyChanged(nameof(MaxQueueSize));
 			NotifyPropertyChanged(nameof(TwitchIntegrationEnabled));
 			NotifyPropertyChanged(nameof(MinimumRating));
 			NotifyPropertyChanged(nameof(MaximumSongDuration));

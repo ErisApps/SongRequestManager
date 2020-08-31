@@ -4,5 +4,6 @@
 	{
 		public virtual string Prefix { get; set; } = "!";
 		public virtual bool QueueOpen { get; set; } = true;
+		public virtual int MaxQueueSize { get; set; } = 50;
 	}
 }

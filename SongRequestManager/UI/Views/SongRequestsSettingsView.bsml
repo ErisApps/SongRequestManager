@@ -9,12 +9,13 @@
 		<tab tags='settings-tab' tab-name='General'>
 			<bg>
 				<vertical background="round-rect-panel" horizontal-fit="Unconstrained" pad="4" child-control-height="true" child-expand-height="false">
+
+					<string-setting text='Prefix' hover-hint="The prefix that viewers have to use in order to use a command." apply-on-change="true" bind-value="true" value="command-prefix"/>
+					<slider-setting text='Maximum request count' hover-hint='Maximum amount of requests in queue at one time. Set to 0 to disable.' min='0' max='150' increment='1' integer-only='true'
+									apply-on-change="true" bind-value="true" value="max-queue-size"/>
+					<text text="Experimental settings !!!" color="yellow" align="Center" all-uppercase="true"/>
 					<bool-setting text='Twitch integration enabled' hover-hint="THIS IS A WORK IN PROGRESS. Changing this value will require a restart to take effect. (for now)" apply-on-change="true"
 								  bind-value="true" value='twitch-integration-enabled'/>
-					<string-setting text='Prefix' hover-hint="The prefix that viewers have to use in order to use a command." apply-on-change="true" bind-value="true" value="prefix-string"/>
-					<text text="Not implemented yet !" color="yellow" align="Center"/>
-					<slider-setting text='Maximum request count' hover-hint='Maximum amount of requests in queue at one time.' min='0' max='150' increment='1' integer-only='true'
-									apply-on-change="true" bind-value="true"/>
 				</vertical>
 			</bg>
 		</tab>

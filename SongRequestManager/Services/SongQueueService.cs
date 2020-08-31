@@ -50,6 +50,12 @@ namespace SongRequestManager.Services
 				return (false, "Song was not added. Queue is closed.");
 			}
 
+			if (SRMConfig.Instance.GeneralSettings.MaxQueueSize > 0 && RequestQueue.Count >= SRMConfig.Instance.GeneralSettings.MaxQueueSize)
+			{
+				Logger.Log("Q full");
+				return (false, "Song was not added. Queue is full.");
+			}
+
 			if (RequestQueue.Any(x => x.BeatSaverKey == request.BeatSaverKey))
 			{
 				Logger.Log("Song with id already in Q");
