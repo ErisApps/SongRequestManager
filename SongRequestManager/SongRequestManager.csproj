@@ -5,25 +5,30 @@
 		<OutputType>Library</OutputType>
 		<LangVersion>8</LangVersion>
 		<Nullable>enable</Nullable>
+		<OutDir>$(ProjectDir)bin\$(Configuration)</OutDir>
 		<ModVersion>0.4.0</ModVersion>
 		<AssemblyVersion>$(ModVersion)</AssemblyVersion>
 		<FileVersion>$(ModVersion)</FileVersion>
 		<InformationalVersion>$(ModVersion)</InformationalVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<DebugType>full</DebugType>
+	</PropertyGroup>
+
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-	  <DebugType>pdbonly</DebugType>
+		<DebugType>pdbonly</DebugType>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="manifest.json" />
-		<EmbeddedResource Include="UI\LoadingProgressModal\LoadingProgressModal.bsml" />
-		<EmbeddedResource Include="UI\Views\*.bsml" />
+		<EmbeddedResource Include="manifest.json"/>
+		<EmbeddedResource Include="UI\LoadingProgressModal\LoadingProgressModal.bsml"/>
+		<EmbeddedResource Include="UI\Views\*.bsml"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="System.IO.Compression" />
-		
+		<Reference Include="System.IO.Compression"/>
+
 		<Reference Include="UnityEngine">
 			<HintPath>$(GameDirPath)Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
 		</Reference>
@@ -78,18 +83,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="SongRequestManager.csproj.user" />
+		<Content Include="SongRequestManager.csproj.user"/>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+		<PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0"/>
 	</ItemGroup>
 
 	<Target Name="CopyToPlugins" AfterTargets="AfterBuild">
-		<Message Text="Copying $(OutDir)SongRequestManager.dll to Plugins folder" Importance="high" />
-		<Copy SourceFiles="$(OutDir)SongRequestManager.dll" DestinationFiles="$(GameDirPath)Plugins\SongRequestManager.dll" />
-		<Message Text="Copying $(OutDir)SongRequestManager.pdb to Plugins folder" Importance="high" />
-		<Copy SourceFiles="$(OutDir)SongRequestManager.pdb" DestinationFiles="$(GameDirPath)Plugins\SongRequestManager.pdb" />
+		<Message Text="Copying $(OutDir)SongRequestManager.dll to Plugins folder" Importance="high"/>
+		<Copy SourceFiles="$(OutDir)SongRequestManager.dll" DestinationFiles="$(GameDirPath)Plugins\SongRequestManager.dll"/>
+		<Message Text="Copying $(OutDir)SongRequestManager.pdb to Plugins folder" Importance="high"/>
+		<Copy SourceFiles="$(OutDir)SongRequestManager.pdb" DestinationFiles="$(GameDirPath)Plugins\SongRequestManager.pdb"/>
 	</Target>
 
 </Project>
