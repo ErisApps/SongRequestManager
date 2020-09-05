@@ -34,7 +34,35 @@ namespace SongRequestManager.UI
 			set => SRMConfig.Instance.TwitchSettings.Enabled = value;
 		}
 
+
 		// ============== Twitch ============== //
+		[UIValue("user-request-limit")]
+		public int UserRequestLimit
+		{
+			get => SRMConfig.Instance.TwitchSettings.UserRequestLimit;
+			set => SRMConfig.Instance.TwitchSettings.UserRequestLimit = value;
+		}
+
+		[UIValue("sub-request-limit")]
+		public int SubRequestLimit
+		{
+			get => SRMConfig.Instance.TwitchSettings.SubRequestLimit;
+			set => SRMConfig.Instance.TwitchSettings.SubRequestLimit = value;
+		}
+
+		[UIValue("mod-request-limit")]
+		public int ModRequestLimit
+		{
+			get => SRMConfig.Instance.TwitchSettings.ModRequestLimit;
+			set => SRMConfig.Instance.TwitchSettings.ModRequestLimit = value;
+		}
+
+		[UIValue("vip-bonus-limit")]
+		public int VipBonusLimit
+		{
+			get => SRMConfig.Instance.TwitchSettings.VipBonusLimit;
+			set => SRMConfig.Instance.TwitchSettings.VipBonusLimit = value;
+		}
 
 
 		// ============== Filters ============= //
@@ -70,6 +98,7 @@ namespace SongRequestManager.UI
 		[UIValue("mod-version")]
 		public string Version => $"v{Plugin.Version}";
 
+
 		[UIAction("#post-parse")]
 		public void Setup()
 		{
@@ -82,6 +111,10 @@ namespace SongRequestManager.UI
 			NotifyPropertyChanged(nameof(Prefix));
 			NotifyPropertyChanged(nameof(MaxQueueSize));
 			NotifyPropertyChanged(nameof(TwitchIntegrationEnabled));
+			NotifyPropertyChanged(nameof(UserRequestLimit));
+			NotifyPropertyChanged(nameof(SubRequestLimit));
+			NotifyPropertyChanged(nameof(ModRequestLimit));
+			NotifyPropertyChanged(nameof(VipBonusLimit));
 			NotifyPropertyChanged(nameof(MinimumRating));
 			NotifyPropertyChanged(nameof(MaximumSongDuration));
 			NotifyPropertyChanged(nameof(MinimumNjs));

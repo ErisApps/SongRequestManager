@@ -22,14 +22,15 @@
 
 		<tab tags='settings-tab' tab-name='Twitch'>
 			<vertical background="round-rect-panel" horizontal-fit="Unconstrained" pad="4" child-control-height="true" child-expand-height="false" spacing="1">
-				<text text="Not implemented yet !" color="yellow" align="Center" all-uppercase="true"/>
 				<slider-setting text='User Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='50' increment='1' integer-only='true' apply-on-change="true"
-								bind-value="true"/>
+				bind-value="true" value="user-request-limit"/>
 				<slider-setting text='Sub Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='50' increment='1' integer-only='true' apply-on-change="true"
-								bind-value="true"/>
+				bind-value="true" value="sub-request-limit"/>
 				<slider-setting text='Moderator Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='100' increment='1' integer-only='true' apply-on-change="true"
-								bind-value="true"/>
-				<slider-setting text='VIP Request bonus' hover-hint='Additional requests allowed in queue' min='0' max='10' increment='1' integer-only='true' apply-on-change="true" bind-value="true"/>
+				bind-value="true" value="mod-request-limit"/>
+				<slider-setting text='VIP Request bonus' hover-hint='Additional requests allowed in queue' min='0' max='10' increment='1' integer-only='true' apply-on-change="true" bind-value="true"
+				value="vip-bonus-limit"/>
+				<text text="Not implemented yet !" color="yellow" align="Center" all-uppercase="true"/>
 				<bool-setting text='Full moderator rights' hover-hint='Allow moderators access to ALL bot commands. Do you trust your mods?' apply-on-change="true" bind-value="true"/>
 			</vertical>
 		</tab>
