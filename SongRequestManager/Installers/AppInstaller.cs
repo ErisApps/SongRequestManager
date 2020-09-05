@@ -24,10 +24,10 @@ namespace SongRequestManager.Installers
 				Container.BindInterfacesAndSelfTo<ChatHandlerService>().AsSingle().NonLazy();
 				Logger.Log($"Binding {nameof(CommandManager)}");
 				Container.BindInterfacesAndSelfTo<CommandManager>().AsSingle().NonLazy();
+				Logger.Log($"Binding {nameof(StatTrackService)}");
+				Container.BindInterfacesAndSelfTo<StatTrackService>().AsSingle().NonLazy();
 				Logger.Log($"Binding {nameof(SongQueueService)}");
 				Container.BindInterfacesAndSelfTo<SongQueueService>().AsSingle().NonLazy();
-				Logger.Log($"Binding {nameof(UserRequestTrackerManager)}");
-				Container.BindInterfacesAndSelfTo<UserRequestTrackerManager>().AsSingle().NonLazy();
 				Logger.Log($"Binding commands of type {nameof(ICommand)}");
 				Container.Bind<ICommand>().To(binder => binder.AllNonAbstractClasses().DerivingFrom<ICommand>().FromThisAssembly()).AsSingle().NonLazy();
 				Logger.Log($"All bindings installed in {nameof(AppInstaller)}");
