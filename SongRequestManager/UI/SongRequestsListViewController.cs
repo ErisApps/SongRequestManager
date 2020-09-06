@@ -27,7 +27,7 @@ namespace SongRequestManager.UI
 		private SongQueueService _songQueueService;
 		private SongListUtils _songListUtils;
 
-		private Request SelectedRequest;
+		private Request? _selectedRequest;
 
 		public event Action DismissRequested;
 
@@ -44,23 +44,31 @@ namespace SongRequestManager.UI
 		[UIAction("selectRequest")]
 		public void Select(TableView _, int row)
 		{
-			SelectedRequest = _songQueueService.RequestQueue[row];
+			_selectedRequest = _songQueueService.RequestQueue[row];
 			NotifyPropertyChanged(nameof(IsRequestSelected));
 		}
 
 		[UIValue("is-request-selected")]
-		public bool IsRequestSelected => SelectedRequest != null;
+		public bool IsRequestSelected => _selectedRequest != null;
 
 		[UIAction("skip-button-click")]
 		internal void Skip()
 		{
-			_songQueueService.Skip(SelectedRequest);
+			if (_selectedRequest == null)
+			{
+				return;
+			}
+
+			_songQueueService.Skip(_selectedRequest);
+
+			_selectedRequest = null!;
+			NotifyPropertyChanged(nameof(IsRequestSelected));
 		}
 
 		[UIAction("play-button-click")]
 		internal async Task Play()
 		{
-			if (SelectedRequest == null)
+			if (_selectedRequest == null)
 			{
 				return;
 			}
@@ -74,16 +82,19 @@ namespace SongRequestManager.UI
 				LoadingProgressModal.LoadingProgressModal.instance.ShowDialog(gameObject, progress, () => cts.Cancel());
 
 				// Download song if required and mark as "played"
-				await _songQueueService.Play(SelectedRequest, cts.Token, progress).ConfigureAwait(false);
+				await _songQueueService.Play(_selectedRequest, cts.Token, progress).ConfigureAwait(false);
 
 				await UnityMainThreadTaskScheduler.Factory.StartNew(() =>
 				{
 					// Select song in list
-					StartCoroutine(_songListUtils.ScrollToLevel(SelectedRequest.BeatMap.Hash.ToUpper(), b => { }, true));
+					StartCoroutine(_songListUtils.ScrollToLevel(_selectedRequest.BeatMap.Hash.ToUpper(), b => { }, true));
 
 					// Navigate back
 					DismissRequested?.Invoke();
 				}, cts.Token).ConfigureAwait(false);
+
+				_selectedRequest = null!;
+				NotifyPropertyChanged(nameof(IsRequestSelected));
 			}
 			catch (OperationCanceledException)
 			{
@@ -203,9 +214,7 @@ namespace SongRequestManager.UI
 						customListTableData.data[e.OldStartingIndex] = replaceCellInfo;
 						break;
 					case NotifyCollectionChangedAction.Move:
-						return;
 					case NotifyCollectionChangedAction.Reset:
-						return;
 					default:
 						return;
 				}
