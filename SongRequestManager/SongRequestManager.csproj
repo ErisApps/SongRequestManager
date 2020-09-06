@@ -6,7 +6,7 @@
 		<LangVersion>8</LangVersion>
 		<Nullable>enable</Nullable>
 		<OutDir>$(ProjectDir)bin\$(Configuration)</OutDir>
-		<ModVersion>0.5.0</ModVersion>
+		<ModVersion>0.5.1</ModVersion>
 		<AssemblyVersion>$(ModVersion)</AssemblyVersion>
 		<FileVersion>$(ModVersion)</FileVersion>
 		<InformationalVersion>$(ModVersion)</InformationalVersion>
