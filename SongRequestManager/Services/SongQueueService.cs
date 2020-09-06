@@ -155,7 +155,7 @@ namespace SongRequestManager.Services
 					Loader.SongsLoadedEvent += ReleaseSemaphore;
 
 					Collections.AddSong(request.BeatMap.ID, songPath);
-					Loader.Instance.RefreshSongs();
+					Loader.Instance.RefreshSongs(false);
 					await semaphoreSlim.WaitAsync(CancellationToken.None);
 				}
 				catch (Exception e)
