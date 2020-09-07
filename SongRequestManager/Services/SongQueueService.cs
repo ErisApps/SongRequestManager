@@ -191,6 +191,19 @@ namespace SongRequestManager.Services
 
 			request.Status = RequestStatus.Played;
 
+			MoveRequestToHistory(request);
+		}
+
+		public void Skip(Request request)
+		{
+			request.Status = RequestStatus.Skipped;
+
+			MoveRequestToHistory(request);
+		}
+
+
+		private void MoveRequestToHistory(Request request)
+		{
 			using (SRMRequests.Instance.ChangeTransaction)
 			{
 				RequestQueue.Remove(request);
@@ -200,17 +213,6 @@ namespace SongRequestManager.Services
 				{
 					SRMRequests.Instance.HistoryData.RemoveRange(50, SRMRequests.Instance.HistoryData.Count - 50);
 				}
-			}
-
-			_statTrackService.DecreaseRequestCountForUser(request.Requestor);
-		}
-
-		public void Skip(Request request)
-		{
-			using (SRMRequests.Instance.ChangeTransaction)
-			{
-				RequestQueue.Remove(request);
-				SRMRequests.Instance.QueueData.Remove(request);
 			}
 
 			_statTrackService.DecreaseRequestCountForUser(request.Requestor);
