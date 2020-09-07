@@ -19,10 +19,13 @@ namespace SongRequestManager.Services
 	public class SongQueueService
 	{
 		private readonly BeatSaverService _beatSaverService;
+		private readonly StatTrackService _statTrackService;
 
-		public SongQueueService(BeatSaverService beatSaverService)
+		internal SongQueueService(BeatSaverService beatSaverService, StatTrackService statTrackService)
 		{
 			_beatSaverService = beatSaverService;
+			_statTrackService = statTrackService;
+
 			RequestQueue = new ObservableCollection<Request>(SRMRequests.Instance.QueueData.Select(x =>
 			{
 				x.BeatMap.SetProperty("Client", _beatSaverService.BeatSaverSharpInstance);
@@ -79,6 +82,13 @@ namespace SongRequestManager.Services
 				return (false, $"Song doesn't match filter. {filterResult.Item2}");
 			}
 
+			var currentRequestCount = _statTrackService.GetCurrentRequestCountForUser(requestor.Id);
+			var maxConcurrentRequestCount = StatTrackService.GetMaxConcurrentRequestCountForUser(requestor);
+			if (currentRequestCount >= maxConcurrentRequestCount)
+			{
+				return (false, $"Request limit reached. You can only request {maxConcurrentRequestCount} song(s) in total.");
+			}
+
 			try
 			{
 				request.Status = RequestStatus.Queued;
@@ -91,6 +101,8 @@ namespace SongRequestManager.Services
 					SRMRequests.Instance.QueueData.Add(request);
 					SRMRequests.Instance.Changed();
 				}
+
+				_statTrackService.IncreaseRequestCountForUser(request.Requestor);
 
 				Logger.Log("Added request");
 			}
@@ -189,6 +201,8 @@ namespace SongRequestManager.Services
 					SRMRequests.Instance.HistoryData.RemoveRange(50, SRMRequests.Instance.HistoryData.Count - 50);
 				}
 			}
+
+			_statTrackService.DecreaseRequestCountForUser(request.Requestor);
 		}
 
 		public void Skip(Request request)
@@ -198,6 +212,8 @@ namespace SongRequestManager.Services
 				RequestQueue.Remove(request);
 				SRMRequests.Instance.QueueData.Remove(request);
 			}
+
+			_statTrackService.DecreaseRequestCountForUser(request.Requestor);
 		}
 
 		private void RequestQueueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
