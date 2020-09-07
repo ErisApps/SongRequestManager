@@ -52,7 +52,7 @@ namespace SongRequestManager.Services
 					}
 				}
 
-				LeaderboardEntries.Add(new StatTrackEntry(user, 1));
+				LeaderboardEntries.Add(StatTrackEntry.Create(user, 1));
 			}
 		}
 

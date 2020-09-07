@@ -5,26 +5,26 @@ namespace SongRequestManager.Models
 {
 	public class User
 	{
-		public User()
-		{
+		/// <remarks>
+		///	Please use this static Create method instead, the public ctor only exists for the BSIPA config
+		/// </remarks>
+		public static User Create(string id, Platform platform, string displayName)
+		{	return new User
+			{
+				Id = id,
+				Platform = platform,
+				DisplayName = displayName
+			};
 		}
-
-		public User(string id, Platform platform, string username)
-		{
-			Id = id;
-			Platform = platform;
-			Username = username;
-		}
-
 
 		[NonNullable]
-		public virtual string Id { get; set; }
+		public virtual string Id { get; set; } = null!;
 
 		[NonNullable]
 		[UseConverter(typeof(EnumConverter<Platform>))]
 		public virtual Platform Platform { get; set; }
 
 		[NonNullable]
-		public virtual string Username { get; set; }
+		public virtual string DisplayName { get; set; } = null!;
 	}
 }

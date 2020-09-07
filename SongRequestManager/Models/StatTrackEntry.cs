@@ -5,21 +5,25 @@ namespace SongRequestManager.Models
 {
 	internal class StatTrackEntry : User
 	{
-		public StatTrackEntry()
+		/// <remarks>
+		///	Please use this static Create method instead, the public ctor only exists for the BSIPA config
+		/// </remarks>
+		public static StatTrackEntry Create(User user, uint numberOfRequests = 0, DateTime? lastModified = null)
 		{
-		}
-
-		public StatTrackEntry(User user, uint numberOfRequests = 0, DateTime? lastModified = null)
-			: base(user.Id, user.Platform, user.Username)
-		{
-			NumberOfRequests = numberOfRequests;
-			LastModified = lastModified ?? DateTime.Now;
+			return new StatTrackEntry
+			{
+				Id = user.Id,
+				Platform = user.Platform,
+				DisplayName = user.DisplayName,
+				NumberOfRequests = numberOfRequests,
+				LastModified = lastModified ?? DateTime.Now
+			};
 		}
 
 		[NonNullable]
-		public uint NumberOfRequests { get; set; }
+		public virtual uint NumberOfRequests { get; set; }
 
 		[NonNullable]
-		public DateTime LastModified { get; set; }
+		public virtual DateTime LastModified { get; set; }
 	}
 }

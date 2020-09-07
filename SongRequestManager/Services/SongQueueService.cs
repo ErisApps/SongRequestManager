@@ -93,7 +93,7 @@ namespace SongRequestManager.Services
 			{
 				request.Status = RequestStatus.Queued;
 				request.BeatMap = beatMap;
-				request.Requestor = new Models.User(requestor.Id, requestor.GetPlatform(), requestor.DisplayName);
+				request.Requestor = Models.User.Create(requestor.Id, requestor.GetPlatform(), requestor.DisplayName);
 
 				using (SRMRequests.Instance.ChangeTransaction)
 				{
