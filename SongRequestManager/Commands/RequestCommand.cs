@@ -31,7 +31,7 @@ namespace SongRequestManager.Commands
 			// TODO: Do validation and possibly support more
 			try
 			{
-				var added = await _songQueueService.AddRequest(new Request
+				var added = await _songQueueService.AddRequest(chatMessage.Sender, new Request
 				{
 					BeatSaverKey = leftOverMessage,
 					Status = RequestStatus.Queued,

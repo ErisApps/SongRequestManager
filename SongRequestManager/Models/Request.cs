@@ -20,6 +20,10 @@ namespace SongRequestManager.Models
 		public virtual DateTime RequestDateTime { get; set; }
 
 		[NonNullable]
+		[UseConverter]
+		public virtual User Requestor { get; set; }
+
+		[NonNullable]
 		[UseConverter(typeof(BeatMapConfigConverter))]
 		public virtual Beatmap BeatMap { get; set; }
 	}

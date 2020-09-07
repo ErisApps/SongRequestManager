@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BeatSaverSharp;
+using ChatCore.Interfaces;
 using IPA.Utilities;
 using SongCore;
+using SongRequestManager.Extensions;
 using SongRequestManager.Models;
 using SongRequestManager.Settings;
 using SongRequestManager.Utilities;
@@ -42,7 +44,7 @@ namespace SongRequestManager.Services
 
 		public bool ToggleQueue() => QueueOpen = !QueueOpen;
 
-		public async Task<ValueTuple<bool, string>> AddRequest(Request request)
+		public async Task<(bool, string)> AddRequest(IChatUser requestor, Request request)
 		{
 			if (!QueueOpen)
 			{
@@ -81,6 +83,7 @@ namespace SongRequestManager.Services
 			{
 				request.Status = RequestStatus.Queued;
 				request.BeatMap = beatMap;
+				request.Requestor = new Models.User(requestor.Id, requestor.GetPlatform(), requestor.DisplayName);
 
 				using (SRMRequests.Instance.ChangeTransaction)
 				{
