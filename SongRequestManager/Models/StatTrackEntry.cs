@@ -1,5 +1,6 @@
 ﻿using System;
 using IPA.Config.Stores.Attributes;
+using SongRequestManager.Settings.Converters;
 
 namespace SongRequestManager.Models
 {
@@ -24,6 +25,7 @@ namespace SongRequestManager.Models
 		public virtual uint NumberOfRequests { get; set; }
 
 		[NonNullable]
+		[UseConverter(typeof(DateTimeConfigConverter))]
 		public virtual DateTime LastModified { get; set; }
 	}
 }
