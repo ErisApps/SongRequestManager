@@ -2,13 +2,13 @@
 using System.Reflection;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Notify;
 using HMUI;
 using UnityEngine;
 
 namespace SongRequestManager.UI.LoadingProgressModal
 {
-	public class LoadingProgressModal : NotifiableSingleton<LoadingProgressModal>
+	internal class LoadingProgressModal : INotifiableHost
 	{
 		private Progress<double> _progress;
 		private Action? _onCancel;
@@ -27,7 +27,7 @@ namespace SongRequestManager.UI.LoadingProgressModal
 		[UIValue("progress")]
 		internal string ProgressText { get; set; } = "";
 
-		public void ShowDialog(GameObject hostGameObject, Progress<double> progress, Action onCancel = null)
+		public void ShowDialog(GameObject hostGameObject, Progress<double> progress, Action? onCancel = null)
 		{
 			BSMLParser.instance.Parse(
 				BeatSaberMarkupLanguage.Utilities.GetResourceContent(
@@ -66,7 +66,9 @@ namespace SongRequestManager.UI.LoadingProgressModal
 		private void UpdateProgressText(int progress)
 		{
 			ProgressText = $"{progress}%";
-			NotifyPropertyChanged(nameof(ProgressText));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProgressText)));
 		}
+
+		public event PropertyChangedEventHandler? PropertyChanged;
 	}
 }

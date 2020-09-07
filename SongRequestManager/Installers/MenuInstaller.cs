@@ -1,6 +1,7 @@
 using BeatSaberMarkupLanguage;
 using SiraUtil.Zenject;
 using SongRequestManager.UI;
+using SongRequestManager.UI.LoadingProgressModal;
 using SongRequestManager.Utilities;
 using Zenject;
 
@@ -23,6 +24,7 @@ namespace SongRequestManager.Installers
 			var songRequestsButtonViewController = BeatSaberUI.CreateViewController<SongRequestsButtonViewController>();
 
 			Container.Bind<SongListUtils>().ToSelf().AsSingle().NonLazy();
+			Container.Bind<LoadingProgressModal>().ToSelf().AsTransient().Lazy();
 			Container.InjectSpecialInstance<SongRequestsListViewController>(songRequestsListViewController);
 			Container.InjectSpecialInstance<SongRequestsSettingsViewController>(songRequestsSettingsViewController);
 			Container.InjectSpecialInstance<SongRequestsFlowCoordinator>(songRequestsFlowCoordinator);

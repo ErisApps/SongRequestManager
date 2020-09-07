@@ -24,16 +24,18 @@ namespace SongRequestManager.UI
 	[ViewDefinition("SongRequestManager.UI.Views.SongRequestsListView.bsml")]
 	public class SongRequestsListViewController : BSMLAutomaticViewController
 	{
-		private SongQueueService _songQueueService;
-		private SongListUtils _songListUtils;
+		private SongQueueService _songQueueService = null!;
+		private SongListUtils _songListUtils = null!;
+		private LoadingProgressModal.LoadingProgressModal _loadingProgressModal = null!;
 
 		private Request? _selectedRequest;
 
 		public event Action DismissRequested;
 
 		[Inject]
-		protected void Construct(SongQueueService songQueueService, SongListUtils songListUtils)
+		internal void Construct(SongQueueService songQueueService, SongListUtils songListUtils, LoadingProgressModal.LoadingProgressModal loadingProgressModal)
 		{
+			_loadingProgressModal = loadingProgressModal;
 			_songQueueService = songQueueService;
 			_songListUtils = songListUtils;
 		}
@@ -79,7 +81,7 @@ namespace SongRequestManager.UI
 				var cts = new CancellationTokenSource();
 				cts.Token.ThrowIfCancellationRequested();
 				var progress = new Progress<double>();
-				LoadingProgressModal.LoadingProgressModal.instance.ShowDialog(gameObject, progress, () => cts.Cancel());
+				_loadingProgressModal.ShowDialog(gameObject, progress, () => cts.Cancel());
 
 				// Download song if required and mark as "played"
 				await _songQueueService.Play(_selectedRequest, cts.Token, progress).ConfigureAwait(false);
@@ -98,12 +100,12 @@ namespace SongRequestManager.UI
 			}
 			catch (OperationCanceledException)
 			{
-				LoadingProgressModal.LoadingProgressModal.instance.HideDialog();
+				_loadingProgressModal.HideDialog();
 				// NOP, expected behaviour due to token cancellation... I hope...
 			}
 			catch (Exception e)
 			{
-				LoadingProgressModal.LoadingProgressModal.instance.HideDialog();
+				_loadingProgressModal.HideDialog();
 				Logger.Log(e.ToString(), IPA.Logging.Logger.Level.Error);
 			}
 		}
