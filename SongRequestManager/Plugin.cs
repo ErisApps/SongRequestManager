@@ -49,6 +49,7 @@ namespace SongRequestManager
 		{
 			InitialiseConfig<SRMConfig>("Settings");
 			InitialiseConfig<SRMRequests>("Requests");
+			InitialiseConfig<SRMStatTrack>("StatTrack");
 		}
 
 		private static void InitialiseConfig<T>(string configName) where T : BaseConfig<T>
