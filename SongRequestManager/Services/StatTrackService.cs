@@ -20,10 +20,12 @@ namespace SongRequestManager.Services
 				.Where(x => x.Requestor?.Id != null)
 				.GroupBy(x => x.Requestor.Id)
 				.Select(group => new KeyValuePair<string, int>(group.Key, group.Count())));
-			LeaderboardEntries = new ObservableCollection<StatTrackEntry>(SRMStatTrack.Instance.LeaderboardEntries);
+			LeaderboardEntries = new ObservableCollection<StatTrackEntry>(SRMStatTrack.Instance.LeaderboardEntries
+				.OrderByDescending(x => x.NumberOfRequests)
+				.ThenBy(x => x.DisplayName, StringComparer.InvariantCultureIgnoreCase));
 		}
 
-		internal ObservableCollection<StatTrackEntry> LeaderboardEntries { get; set; }
+		internal ObservableCollection<StatTrackEntry> LeaderboardEntries { get; }
 
 		internal int GetCurrentRequestCountForUser(string userId)
 		{
@@ -37,22 +39,68 @@ namespace SongRequestManager.Services
 				return;
 			}
 
-			using (SRMStatTrack.Instance.ChangeTransaction)
+			void MoveToCorrectSpot(StatTrackEntry entry, int oldIndex)
 			{
-				_userCurrentRequestCounters.AddOrUpdate(user.Id, 1, (userId, requestCount) => ++requestCount);
-				for (var i = 0; i < LeaderboardEntries.Count; i++)
+				if (oldIndex == 0)
 				{
-					var statTrackEntry = LeaderboardEntries[i];
-					if (statTrackEntry.Id == user.Id)
+					return;
+				}
+
+				var newIndex = oldIndex;
+				for (var i = oldIndex - 1; i >= 0; i--)
+				{
+					var sortResult = (int)entry.NumberOfRequests - LeaderboardEntries[i].NumberOfRequests;
+					if (sortResult == 0)
 					{
-						statTrackEntry.NumberOfRequests++;
-						statTrackEntry.LastModified = DateTime.Now;
-						LeaderboardEntries[i] = statTrackEntry;
-						return;
+						sortResult = string.Compare(LeaderboardEntries[i].DisplayName, entry.DisplayName, StringComparison.InvariantCultureIgnoreCase);
+					}
+
+					if (sortResult == 0)
+					{
+						newIndex = i;
+						break;
+					}
+
+					if (sortResult < 0)
+					{
+						newIndex = i + 1;
+						break;
 					}
 				}
 
-				LeaderboardEntries.Add(StatTrackEntry.Create(user, 1));
+				if (newIndex == oldIndex)
+				{
+					return;
+				}
+
+				LeaderboardEntries.Move(oldIndex, newIndex);
+			}
+
+			using (SRMStatTrack.Instance.ChangeTransaction)
+			{
+				_userCurrentRequestCounters.AddOrUpdate(user.Id, 1, (userId, requestCount) => ++requestCount);
+
+				StatTrackEntry statTrackEntry = null!;
+				for (var i = 0; i < LeaderboardEntries.Count; i++)
+				{
+					if (LeaderboardEntries[i].Id == user.Id)
+					{
+						statTrackEntry = LeaderboardEntries[i];
+						statTrackEntry.NumberOfRequests += 1;
+						statTrackEntry.LastModified = DateTime.Now;
+						LeaderboardEntries[i] = statTrackEntry;
+						MoveToCorrectSpot(statTrackEntry, i);
+					}
+				}
+
+				if (statTrackEntry == null)
+				{
+					statTrackEntry = StatTrackEntry.Create(user, 1);
+					LeaderboardEntries.Add(statTrackEntry);
+					MoveToCorrectSpot(statTrackEntry, LeaderboardEntries.Count - 1);
+				}
+
+				SRMStatTrack.Instance.LeaderboardEntries = LeaderboardEntries.ToList();
 			}
 		}
 
