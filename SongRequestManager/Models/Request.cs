@@ -8,11 +8,18 @@ namespace SongRequestManager.Models
 {
 	public class Request
 	{
+		[NonNullable]
 		public virtual string BeatSaverKey { get; set; }
+
+		[NonNullable]
 		[UseConverter(typeof(EnumConverter<RequestStatus>))]
 		public virtual RequestStatus Status { get; set; }
+
+		[NonNullable]
 		[UseConverter(typeof(DateTimeConfigConverter))]
 		public virtual DateTime RequestDateTime { get; set; }
+
+		[NonNullable]
 		[UseConverter(typeof(BeatMapConfigConverter))]
 		public virtual Beatmap BeatMap { get; set; }
 	}
