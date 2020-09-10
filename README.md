@@ -19,9 +19,9 @@ Installation is fairly simple.
 All commands listed below use the prefix `!` by default. This can be  changed in the (in-game) settings however.
 
 ### Basic commands
-| Command | Description | Alias |
-| --- | --- | --- |
-| bsr | Allows you to request a song using the Beatsaver ID. | sr, request |
+| Command | Alias | Description | Example |
+| --- | --- | --- | ---|
+| bsr | sr, request | Allows you to request a song using the Beatsaver ID. | bsr abcd
 
 
 ## Developers
