@@ -158,6 +158,7 @@ namespace SongRequestManager.Services
 					return;
 				}
 
+				// Start black magic to force wait on song refresh
 				var semaphoreSlim = new SemaphoreSlim(0, 1);
 
 				void ReleaseSemaphore(Loader _, Dictionary<string, CustomPreviewBeatmapLevel> __)
@@ -180,6 +181,7 @@ namespace SongRequestManager.Services
 					Console.WriteLine(e);
 					throw;
 				}
+				// Black magic ends here
 
 				const string addedSongToSongCore = "Added song to SongCore";
 				Logger.Log(addedSongToSongCore);
