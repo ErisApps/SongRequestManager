@@ -92,7 +92,7 @@ namespace SongRequestManager.UI
 					StartCoroutine(_songListUtils.ScrollToLevel(_selectedRequest.BeatMap.Hash.ToUpper(), b => { }, true));
 
 					// Navigate back
-					DismissRequested?.Invoke();
+					DismissRequested!.Invoke();
 				}, cts.Token).ConfigureAwait(false);
 
 				_selectedRequest = null!;
