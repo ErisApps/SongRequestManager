@@ -22,7 +22,7 @@ namespace SongRequestManager.UI
 	// The hotreload attribute requires a build of BSML that includes https://github.com/monkeymanboy/BeatSaberMarkupLanguage/pull/43
 	[HotReload(RelativePathToLayout = @"Views\SongRequestsListView.bsml")]
 	[ViewDefinition("SongRequestManager.UI.Views.SongRequestsListView.bsml")]
-	public class SongRequestsListViewController : BSMLAutomaticViewController
+	internal class SongRequestsListViewController : BSMLAutomaticViewController
 	{
 		private SongQueueService _songQueueService = null!;
 		private SongListUtils _songListUtils = null!;

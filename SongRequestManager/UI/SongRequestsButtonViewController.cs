@@ -13,8 +13,13 @@ using Logger = SongRequestManager.Utilities.Logger;
 namespace SongRequestManager.UI
 {
 	[NotifyPropertyChanges]
-	public class SongRequestsButtonViewController : BSMLAutomaticViewController
+	internal class SongRequestsButtonViewController : BSMLAutomaticViewController
 	{
+		private StandardLevelDetailViewController _standardLevelDetailViewController = null!;
+		private LevelSelectionFlowCoordinator _levelSelectionFlowCoordinator = null!;
+		private SongQueueService _songQueueService = null!;
+		private SongRequestsFlowCoordinator _songRequestsFlowCoordinator = null!;
+
 		[UIValue("glowy-color")]
 		public string GlowColor { get; set; } = "#ff0d72";
 
@@ -22,12 +27,7 @@ namespace SongRequestManager.UI
 		public bool Interactable { get; set; } = true;
 
 		[UIComponent("srm-button")]
-		private Transform _srmButtonTransform;
-
-		private StandardLevelDetailViewController _standardLevelDetailViewController;
-		private LevelSelectionFlowCoordinator _levelSelectionFlowCoordinator;
-		private SongQueueService _songQueueService;
-		private SongRequestsFlowCoordinator? _songRequestsFlowCoordinator;
+		private Transform _srmButtonTransform = null!;
 
 		[UIAction("button-click")]
 		internal void OpenRequestsView()
@@ -41,7 +41,7 @@ namespace SongRequestManager.UI
 		}
 
 		[Inject]
-		protected void Construct(StandardLevelDetailViewController standardLevelDetailViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator, SongQueueService songQueueService,
+		internal void Construct(StandardLevelDetailViewController standardLevelDetailViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator, SongQueueService songQueueService,
 			SongRequestsFlowCoordinator songRequestsFlowCoordinator)
 		{
 			Logger.Log("SRMBUTTON construct invoked");

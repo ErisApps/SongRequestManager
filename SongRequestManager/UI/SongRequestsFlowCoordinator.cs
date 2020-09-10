@@ -6,14 +6,14 @@ using Zenject;
 
 namespace SongRequestManager.UI
 {
-	public class SongRequestsFlowCoordinator : FlowCoordinator
+	internal class SongRequestsFlowCoordinator : FlowCoordinator
 	{
 		private SongRequestsListViewController? _songRequestsListViewController;
 		private SongRequestsSettingsViewController? _songRequestsSettingsViewController;
-		private LevelSelectionFlowCoordinator _levelSelectionFlowCoordinator;
+		private LevelSelectionFlowCoordinator? _levelSelectionFlowCoordinator;
 
 		[Inject]
-		protected void Construct(SongRequestsListViewController songRequestsListViewController, SongRequestsSettingsViewController songRequestsSettingsViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator)
+		internal void Construct(SongRequestsListViewController songRequestsListViewController, SongRequestsSettingsViewController songRequestsSettingsViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator)
 		{
 			_songRequestsSettingsViewController = songRequestsSettingsViewController;
 			_songRequestsListViewController = songRequestsListViewController;
