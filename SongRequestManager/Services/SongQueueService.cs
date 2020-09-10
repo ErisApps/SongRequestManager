@@ -38,7 +38,7 @@ namespace SongRequestManager.Services
 
 		internal ObservableCollection<Request> RequestQueue { get; }
 
-		public int QueuedRequestCount => RequestQueue.Count(r => r.Status == RequestStatus.Queued);
+		public int QueuedRequestCount => RequestQueue?.Count(r => r.Status == RequestStatus.Queued) ?? 0;
 
 		public bool QueueOpen
 		{
@@ -147,7 +147,7 @@ namespace SongRequestManager.Services
 			return (true, string.Empty);
 		}
 
-		public async Task Play(Request request, CancellationToken cancellationToken, IProgress<double> downloadProgress = null)
+		public async Task Play(Request request, CancellationToken cancellationToken, IProgress<double>? downloadProgress = null)
 		{
 			if (!Collections.songWithHashPresent(request.BeatMap.Hash))
 			{
@@ -182,12 +182,11 @@ namespace SongRequestManager.Services
 				}
 
 				const string addedSongToSongCore = "Added song to SongCore";
-				// chatService.SendTextMessage(addedSongToSongCore, chatMessage.Channel);
 				Logger.Log(addedSongToSongCore);
 			}
 			else
 			{
-				downloadProgress.Report(1);
+				downloadProgress?.Report(1);
 			}
 
 			request.Status = RequestStatus.Played;

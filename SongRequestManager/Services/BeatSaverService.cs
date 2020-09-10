@@ -33,7 +33,7 @@ namespace SongRequestManager.Services
 			return BeatSaverSharpInstance.Key(songKey);
 		}
 
-		public async Task<string?> DownloadSong(Beatmap beatMap, CancellationToken? token = null, bool direct = false, IProgress<double> progress = null)
+		public async Task<string?> DownloadSong(Beatmap beatMap, CancellationToken? token = null, bool direct = false, IProgress<double>? progress = null)
 		{
 			// TODO: Will probably still error?
 			var beatMapZipStream = await (token.HasValue ? beatMap.DownloadZip(direct, token.Value, progress) : beatMap.DownloadZip(direct, progress)).ConfigureAwait(false);

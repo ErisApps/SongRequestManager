@@ -5,7 +5,7 @@ namespace SongRequestManager.Settings.Base
 {
 	internal abstract class ReloadableBaseConfig<T> : BaseConfig<T> where T : class
 	{
-		public event EventHandler ConfigChanged;
+		public event EventHandler? ConfigChanged;
 
 		public virtual void OnReload()
 		{
