@@ -9,6 +9,8 @@ using SongRequestManager.Settings.Base;
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 namespace SongRequestManager.Settings
 {
+	// ReSharper disable once InconsistentNaming
+	[NotifyPropertyChanges]
 	internal class SRMStatTrack : BaseConfig<SRMStatTrack>
 	{
 		[NonNullable]
