@@ -95,12 +95,6 @@ namespace SongRequestManager.UI
 				return;
 			}
 
-			if (_songQueueService.RequestQueue == null)
-			{
-				Logger.Log("RequestQueue instance null", IPA.Logging.Logger.Level.Warning);
-				return;
-			}
-
 			GlowColor = ButtonColorValueConverter.Convert(_songQueueService.QueuedRequestCount > 0);
 			NotifyPropertyChanged(nameof(GlowColor));
 		}
