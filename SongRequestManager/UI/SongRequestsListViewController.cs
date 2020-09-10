@@ -215,8 +215,6 @@ namespace SongRequestManager.UI
 						await LoadThumbnailAsync(replaceCellInfo, replaceRequest).ConfigureAwait(false);
 						customListTableData.data[e.OldStartingIndex] = replaceCellInfo;
 						break;
-					case NotifyCollectionChangedAction.Move:
-					case NotifyCollectionChangedAction.Reset:
 					default:
 						return;
 				}

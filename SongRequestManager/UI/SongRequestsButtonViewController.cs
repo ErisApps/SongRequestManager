@@ -80,10 +80,6 @@ namespace SongRequestManager.UI
 				case NotifyCollectionChangedAction.Reset:
 					UpdateSrmButtonColor();
 					break;
-				case NotifyCollectionChangedAction.Replace:
-				case NotifyCollectionChangedAction.Move:
-				default:
-					break;
 			}
 		}
 
