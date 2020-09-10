@@ -9,7 +9,7 @@ namespace SongRequestManager.Models
 	public class Request
 	{
 		[NonNullable]
-		public virtual string BeatSaverKey { get; set; }
+		public virtual string BeatSaverKey { get; set; }  = null!;
 
 		[NonNullable]
 		[UseConverter(typeof(EnumConverter<RequestStatus>))]
@@ -21,10 +21,10 @@ namespace SongRequestManager.Models
 
 		[NonNullable]
 		[UseConverter]
-		public virtual User Requestor { get; set; }
+		public virtual User Requestor { get; set; } = null!;
 
 		[NonNullable]
 		[UseConverter(typeof(BeatMapConfigConverter))]
-		public virtual Beatmap BeatMap { get; set; }
+		public virtual Beatmap BeatMap { get; set; } = null!;
 	}
 }
