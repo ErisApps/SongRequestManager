@@ -30,7 +30,7 @@ namespace SongRequestManager.UI
 
 		private Request? _selectedRequest;
 
-		public event Action DismissRequested;
+		public event Action DismissRequested = null!;
 
 		[Inject]
 		internal void Construct(SongQueueService songQueueService, SongListUtils songListUtils, LoadingProgressModal.LoadingProgressModal loadingProgressModal)
@@ -111,16 +111,16 @@ namespace SongRequestManager.UI
 		}
 
 		[UIValue("queue-button-text")]
-		internal string QueueButtonText { get; set; }
+		internal string QueueButtonText { get; set; } = string.Empty;
 
 		[UIValue("queue-button-color-face")]
-		internal string QueueButtonColorFace { get; set; } // #dd2266
+		internal string QueueButtonColorFace { get; set; } = ButtonColorValueConverter.Convert(true); // #dd2266
 
 		[UIValue("queue-button-color-glow")]
-		internal string QueueButtonColorGlow { get; set; } // #dd2266
+		internal string QueueButtonColorGlow { get; set; } = ButtonColorValueConverter.Convert(true); // #dd2266
 
 		[UIValue("queue-button-color-stroke")]
-		internal string QueueButtonColorStroke { get; set; } // #dd2266
+		internal string QueueButtonColorStroke { get; set; } = ButtonColorValueConverter.Convert(true); // #dd2266
 
 		[UIAction("queue-button-click")]
 		internal void ToggleQueueState()

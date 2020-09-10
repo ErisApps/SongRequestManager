@@ -10,11 +10,11 @@ namespace SongRequestManager.UI.LoadingProgressModal
 {
 	internal class LoadingProgressModal : INotifiableHost
 	{
-		private Progress<double> _progress;
+		private Progress<double> _progress = null!;
 		private Action? _onCancel;
 
 		[UIComponent("modal")]
-		private ModalView _modal;
+		private ModalView _modal = null!;
 
 		[UIAction("cancel-click")]
 		private void CancelClick()
@@ -25,7 +25,7 @@ namespace SongRequestManager.UI.LoadingProgressModal
 		}
 
 		[UIValue("progress")]
-		internal string ProgressText { get; set; } = "";
+		private string ProgressText { get; set; } = string.Empty;
 
 		public void ShowDialog(GameObject hostGameObject, Progress<double> progress, Action? onCancel = null)
 		{
@@ -48,7 +48,7 @@ namespace SongRequestManager.UI.LoadingProgressModal
 
 		public void HideDialog()
 		{
-			_progress.ProgressChanged -= OnProgressChanged;
+			_progress!.ProgressChanged -= OnProgressChanged;
 			_modal.Hide(true);
 		}
 

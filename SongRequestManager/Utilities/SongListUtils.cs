@@ -15,12 +15,12 @@ namespace SongRequestManager.Utilities
 	/// </summary>
 	public class SongListUtils
 	{
-		private LevelCollectionViewController _levelCollectionViewController;
-		private LevelFilteringNavigationController _levelFilteringNavigationController;
-		private PluginUtils _pluginUtils;
+		private LevelCollectionViewController _levelCollectionViewController = null!;
+		private LevelFilteringNavigationController _levelFilteringNavigationController = null!;
+		private PluginUtils _pluginUtils = null!;
 
 		[Inject]
-		protected void Construct(PluginUtils pluginUtils, LevelCollectionViewController levelCollectionViewController, LevelFilteringNavigationController levelFilteringNavigationController)
+		internal void Construct(PluginUtils pluginUtils, LevelCollectionViewController levelCollectionViewController, LevelFilteringNavigationController levelFilteringNavigationController)
 		{
 			_pluginUtils = pluginUtils;
 			_levelFilteringNavigationController = levelFilteringNavigationController;
@@ -35,7 +35,6 @@ namespace SongRequestManager.Utilities
 
 				// Disable SongBrowser filters as that might prevent us from finding the song in the list
 				_pluginUtils.DisableSongBrowserFilters();
-
 
 				// Make sure our custom songPack is selected
 				SelectCustomSongPack();
