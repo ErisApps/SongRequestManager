@@ -9,7 +9,7 @@ using Zenject;
 
 namespace SongRequestManager.Services
 {
-	public class ChatHandlerService : IInitializable, IDisposable
+	internal class ChatHandlerService : IInitializable, IDisposable
 	{
 		private readonly CommandManager _commandManager;
 

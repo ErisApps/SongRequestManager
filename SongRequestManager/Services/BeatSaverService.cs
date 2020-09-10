@@ -8,9 +8,9 @@ using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Services
 {
-	public sealed class BeatSaverService
+	internal sealed class BeatSaverService
 	{
-		public BeatSaver BeatSaverSharpInstance { get; private set; }
+		internal BeatSaver BeatSaverSharpInstance { get; private set; }
 
 		public BeatSaverService()
 		{
@@ -51,7 +51,7 @@ namespace SongRequestManager.Services
 				}
 
 				Directory.CreateDirectory(path);
-				
+
 				await Task.Factory.StartNew(() => zipArchive.ExtractToDirectory(path));
 
 				return path;

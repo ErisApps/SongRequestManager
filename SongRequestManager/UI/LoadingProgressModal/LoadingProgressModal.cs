@@ -17,7 +17,7 @@ namespace SongRequestManager.UI.LoadingProgressModal
 		private ModalView _modal = null!;
 
 		[UIAction("cancel-click")]
-		private void CancelClick()
+		internal void CancelClick()
 		{
 			HideDialog();
 			_onCancel?.Invoke();
