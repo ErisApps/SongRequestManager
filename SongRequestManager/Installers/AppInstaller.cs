@@ -8,8 +8,6 @@ namespace SongRequestManager.Installers
 {
 	public class AppInstaller : MonoInstaller
 	{
-		public static bool FirstBindingInstalled { get; private set; } = false;
-
 		public override void InstallBindings()
 		{
 			try
@@ -31,15 +29,13 @@ namespace SongRequestManager.Installers
 				Logger.Log($"Binding commands of type {nameof(ICommand)}");
 				Container.Bind<ICommand>().To(binder => binder.AllNonAbstractClasses().DerivingFrom<ICommand>().FromThisAssembly()).AsSingle().NonLazy();
 				Logger.Log($"All bindings installed in {nameof(AppInstaller)}");
-
-				FirstBindingInstalled = true;
 			}
 			catch (Exception e)
 			{
-				Logger.Log(e.ToString(), IPA.Logging.Logger.Level.Info);
+				Logger.Log(e.ToString());
 				if (e.InnerException != null)
 				{
-					Logger.Log(e.InnerException.ToString(), IPA.Logging.Logger.Level.Info);
+					Logger.Log(e.InnerException.ToString());
 				}
 			}
 		}
