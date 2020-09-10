@@ -2,9 +2,9 @@ using System;
 
 namespace SongRequestManager.Settings.Base
 {
-	internal abstract class BaseConfig<T>
+	internal abstract class BaseConfig<T> where T : class
 	{
-		internal static T Instance { get; set; }
+		internal static T Instance { get; set; } = null!;
 
 		public virtual void Changed()
 		{

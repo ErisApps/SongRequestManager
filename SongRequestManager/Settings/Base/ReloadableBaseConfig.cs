@@ -3,7 +3,7 @@ using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Settings.Base
 {
-	internal abstract class ReloadableBaseConfig<T> : BaseConfig<T>
+	internal abstract class ReloadableBaseConfig<T> : BaseConfig<T> where T : class
 	{
 		public event EventHandler ConfigChanged;
 
