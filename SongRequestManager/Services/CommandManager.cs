@@ -5,7 +5,7 @@ using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Services
 {
-	public class CommandManager
+	internal class CommandManager
 	{
 		private List<ICommand> _commands;
 
@@ -49,7 +49,7 @@ namespace SongRequestManager.Services
 				.Cast<ICommand>());
 
 			stopwatch.Stop();
-			
+
 			Logger.Log($"Command initialization took {stopwatch.Elapsed:c}");
 		}*/
 

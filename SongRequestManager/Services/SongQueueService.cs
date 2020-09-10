@@ -36,14 +36,14 @@ namespace SongRequestManager.Services
 			RequestQueue.CollectionChanged += RequestQueueOnCollectionChanged;
 		}
 
-		public ObservableCollection<Request> RequestQueue { get; }
+		internal ObservableCollection<Request> RequestQueue { get; }
 
 		public int QueuedRequestCount => RequestQueue.Count(r => r.Status == RequestStatus.Queued);
 
 		public bool QueueOpen
 		{
 			get => SRMConfig.Instance.GeneralSettings.QueueOpen;
-			private set => SRMConfig.Instance.GeneralSettings.QueueOpen = value;
+			internal set => SRMConfig.Instance.GeneralSettings.QueueOpen = value;
 		}
 
 		public bool ToggleQueue() => QueueOpen = !QueueOpen;
