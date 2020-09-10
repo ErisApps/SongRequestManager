@@ -13,17 +13,28 @@ namespace SongRequestManager.Services
 {
 	public class StatTrackService
 	{
-		private ConcurrentDictionary<string, int> _userCurrentRequestCounters;
+		private readonly Comparer<StatTrackEntry> _statTrackLeaderboardComparer;
+		private readonly ConcurrentDictionary<string, int> _userCurrentRequestCounters;
 
 		public StatTrackService()
 		{
+			_statTrackLeaderboardComparer = Comparer<StatTrackEntry>.Create((entryA, entryB) =>
+			{
+				var sortResult = (int)((int)entryB.NumberOfRequests - entryA.NumberOfRequests);
+				if (sortResult == 0)
+				{
+					sortResult = string.Compare(entryA.DisplayName, entryB.DisplayName, StringComparison.InvariantCultureIgnoreCase);
+				}
+
+				return sortResult;
+			});
+
 			_userCurrentRequestCounters = new ConcurrentDictionary<string, int>(SRMRequests.Instance.QueueData
 				.Where(x => x.Requestor?.Id != null)
 				.GroupBy(x => x.Requestor.Id)
 				.Select(group => new KeyValuePair<string, int>(group.Key, group.Count())));
 			LeaderboardEntries = new ObservableCollection<StatTrackEntry>(SRMStatTrack.Instance.LeaderboardEntries
-				.OrderByDescending(x => x.NumberOfRequests)
-				.ThenBy(x => x.DisplayName, StringComparer.InvariantCultureIgnoreCase));
+				.OrderBy(entry => entry, _statTrackLeaderboardComparer));
 		}
 
 		internal ObservableCollection<StatTrackEntry> LeaderboardEntries { get; }
@@ -38,43 +49,6 @@ namespace SongRequestManager.Services
 			if (user?.Id == null)
 			{
 				return;
-			}
-
-			void MoveToCorrectSpot(StatTrackEntry entry, int oldIndex)
-			{
-				if (oldIndex == 0)
-				{
-					return;
-				}
-
-				var newIndex = oldIndex;
-				for (var i = oldIndex - 1; i >= 0; i--)
-				{
-					var sortResult = (int)entry.NumberOfRequests - LeaderboardEntries[i].NumberOfRequests;
-					if (sortResult == 0)
-					{
-						sortResult = string.Compare(LeaderboardEntries[i].DisplayName, entry.DisplayName, StringComparison.InvariantCultureIgnoreCase);
-					}
-
-					if (sortResult == 0)
-					{
-						newIndex = i;
-						break;
-					}
-
-					if (sortResult < 0)
-					{
-						newIndex = i + 1;
-						break;
-					}
-				}
-
-				if (newIndex == oldIndex)
-				{
-					return;
-				}
-
-				LeaderboardEntries.Move(oldIndex, newIndex);
 			}
 
 			using (SRMStatTrack.Instance.ChangeTransaction)
@@ -159,6 +133,38 @@ namespace SongRequestManager.Services
 			}
 
 			return requestLimit;
+		}
+
+		private void MoveToCorrectSpot(StatTrackEntry entry, int oldIndex)
+		{
+			if (oldIndex == 0)
+			{
+				return;
+			}
+
+			var newIndex = oldIndex;
+			for (var i = oldIndex - 1; i >= 0; i--)
+			{
+				var sortResult = _statTrackLeaderboardComparer.Compare(LeaderboardEntries[i], entry);
+				if (sortResult == 0)
+				{
+					newIndex = i;
+					break;
+				}
+
+				if (sortResult < 0)
+				{
+					newIndex = i + 1;
+					break;
+				}
+			}
+
+			if (newIndex == oldIndex)
+			{
+				return;
+			}
+
+			LeaderboardEntries.Move(oldIndex, newIndex);
 		}
 	}
 }
