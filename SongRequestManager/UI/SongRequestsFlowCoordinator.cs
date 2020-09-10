@@ -49,7 +49,7 @@ namespace SongRequestManager.UI
 			}
 		}
 
-		protected override void BackButtonWasPressed(ViewController topViewController)
+		protected override void BackButtonWasPressed(ViewController _)
 		{
 			// Dismiss ourselves
 			_levelSelectionFlowCoordinator.DismissFlowCoordinator(this);
