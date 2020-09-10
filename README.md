@@ -12,7 +12,7 @@ This mod requires a few other mods in order to work.
 
 Installation is fairly simple.
 1. Grab the latest plugin release from the [releases page](https://github.com/ErisApps/SongRequestManager/releases) (once there is a release)
-2. Drop the .dll file in the Plugins folder of your Beat Saber installation.
+2. Drop the .dll file in the "Plugins" folder of your Beat Saber installation.
 3. Boot it up (or reboot)
 
 ## Usage
