@@ -7,6 +7,7 @@ using ChatCore.Interfaces;
 using ChatCore.Models.Twitch;
 using SongRequestManager.Models;
 using SongRequestManager.Settings;
+using SongRequestManager.Settings.Partial;
 
 namespace SongRequestManager.Services
 {
@@ -122,31 +123,39 @@ namespace SongRequestManager.Services
 			}
 		}
 
-		internal static int GetMaxConcurrentRequestCountForUser(IChatUser user)
+		internal static int? GetMaxConcurrentRequestCountForUser(IChatUser user)
 		{
-			var requestLimit = 0;
-			switch (user)
+			return user switch
 			{
-				case TwitchUser twitchUser:
-					if (twitchUser.IsModerator)
-					{
-						requestLimit = SRMConfig.Instance.TwitchSettings.ModRequestLimit;
-					}
-					else if (twitchUser.IsSubscriber)
-					{
-						requestLimit = SRMConfig.Instance.TwitchSettings.SubRequestLimit;
-					}
-					else
-					{
-						requestLimit = SRMConfig.Instance.TwitchSettings.UserRequestLimit;
-					}
+				TwitchUser twitchUser => GetMaxCurrentRequestCountForTwitchUser(twitchUser),
+				_ => 0
+			};
+		}
 
-					if (twitchUser.IsVip)
-					{
-						requestLimit += SRMConfig.Instance.TwitchSettings.VipBonusLimit;
-					}
+		private static int? CheckIfUnlimited(int upperLimit, int originalRequestLimit)
+		{
+			return originalRequestLimit >= upperLimit ? null! : (int?)originalRequestLimit;
+		}
 
-					break;
+		private static int? GetMaxCurrentRequestCountForTwitchUser(TwitchUser twitchUser)
+		{
+			int? requestLimit;
+			if (twitchUser.IsModerator)
+			{
+				requestLimit = CheckIfUnlimited(TwitchSettings.USER_REQUEST_UPPER_LIMIT, SRMConfig.Instance.TwitchSettings.ModRequestLimit);
+			}
+			else if (twitchUser.IsSubscriber)
+			{
+				requestLimit = CheckIfUnlimited(TwitchSettings.SUB_REQUEST_UPPER_LIMIT, SRMConfig.Instance.TwitchSettings.SubRequestLimit);
+			}
+			else
+			{
+				requestLimit = CheckIfUnlimited(TwitchSettings.MOD_REQUEST_UPPER_LIMIT, SRMConfig.Instance.TwitchSettings.UserRequestLimit);
+			}
+
+			if (requestLimit != null && twitchUser.IsVip)
+			{
+				requestLimit += CheckIfUnlimited(TwitchSettings.VIP_BONUS_UPPER_LIMIT, SRMConfig.Instance.TwitchSettings.VipBonusLimit);
 			}
 
 			return requestLimit;

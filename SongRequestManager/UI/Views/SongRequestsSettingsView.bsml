@@ -11,8 +11,8 @@
 				<vertical background="round-rect-panel" horizontal-fit="Unconstrained" pad="4" child-control-height="true" child-expand-height="false">
 
 					<string-setting text='Prefix' hover-hint="The prefix that viewers have to use in order to use a command." apply-on-change="true" bind-value="true" value="command-prefix"/>
-					<slider-setting text='Maximum request count' hover-hint='Maximum amount of requests in queue at one time. Set to 0 to disable.' min='0' max='150' increment='1' integer-only='true'
-									apply-on-change="true" bind-value="true" value="max-queue-size"/>
+					<slider-setting text='Maximum request count' hover-hint='Maximum amount of requests in queue at one time.' min='0' max='~max-queue-size-upper-limit' increment='1'
+									integer-only='true' apply-on-change="true" bind-value="true" value="max-queue-size" formatter="max-queue-size-formatter"/>
 					<text text="Experimental settings !!!" color="yellow" align="Center" all-uppercase="true"/>
 					<bool-setting text='Twitch integration enabled' hover-hint="THIS IS A WORK IN PROGRESS. Changing this value will require a restart to take effect. (for now)" apply-on-change="true"
 								  bind-value="true" value='twitch-integration-enabled'/>
@@ -22,16 +22,17 @@
 
 		<tab tags='settings-tab' tab-name='Twitch'>
 			<vertical background="round-rect-panel" horizontal-fit="Unconstrained" pad="4" child-control-height="true" child-expand-height="false" spacing="1">
-				<slider-setting text='User Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='50' increment='1' integer-only='true' apply-on-change="true"
-				bind-value="true" value="user-request-limit"/>
-				<slider-setting text='Sub Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='50' increment='1' integer-only='true' apply-on-change="true"
-				bind-value="true" value="sub-request-limit"/>
-				<slider-setting text='Moderator Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='100' increment='1' integer-only='true' apply-on-change="true"
-				bind-value="true" value="mod-request-limit"/>
-				<slider-setting text='VIP Request bonus' hover-hint='Additional requests allowed in queue' min='0' max='10' increment='1' integer-only='true' apply-on-change="true" bind-value="true"
-				value="vip-bonus-limit"/>
+				<slider-setting text='User Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='~user-request-upper-limit' increment='1' integer-only='true'
+								apply-on-change="true" bind-value="true" value="user-request-limit" formatter="user-request-formatter"/>
+				<slider-setting text='Sub Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='~sub-request-upper-limit' increment='1' integer-only='true'
+								apply-on-change="true" bind-value="true" value="sub-request-limit" formatter="sub-request-formatter"/>
+				<slider-setting text='Moderator Request limit' hover-hint='Maximum requests in queue at one time' min='0' max='~mod-request-upper-limit' increment='1' integer-only='true'
+								apply-on-change="true" bind-value="true" value="mod-request-limit" formatter="mod-request-formatter"/>
+				<slider-setting text='VIP Request bonus' hover-hint='Additional requests allowed in queue' min='0' max='~vip-bonus-upper-limit' increment='1' integer-only='true'
+								apply-on-change="true" bind-value="true" value="vip-bonus-limit" formatter="vip-bonus-formatter"/>
 				<text text="Not implemented yet !" color="yellow" align="Center" all-uppercase="true"/>
-				<bool-setting text='Full moderator rights' hover-hint='Allow moderators access to ALL bot commands. Do you trust your mods?' apply-on-change="true" bind-value="true"/>
+				<bool-setting text='Full moderator rights' hover-hint='Allow moderators access to ALL bot commands. Do you trust your mods?' apply-on-change="true" bind-value="true"
+							  interactable="false"/>
 			</vertical>
 		</tab>
 
@@ -41,8 +42,8 @@
 					<text text="Untested stuffs !" color="yellow" align="Center" all-uppercase="true"/>
 					<slider-setting text='Minimum rating' hover-hint="The minimum rating a song has to have." min="0" max="100" integer-only="true" apply-on-change="true" bind-value="true"
 									value="minimum-rating"/>
-					<slider-setting text='Maximum song duration' hover-hint="The maximum allowed duration in seconds. Set to 0 to disable." min="0" max="999" integer-only="true"
-									apply-on-change="true" bind-value="true" value="maximum-song-duration"/>
+					<slider-setting text='Maximum song duration' hover-hint="The maximum allowed duration in seconds." min="0" max="~max-song-duration-upper-limit" integer-only="true"
+									apply-on-change="true" bind-value="true" value="maximum-song-duration" formatter="max-song-duration-formatter"/>
 					<slider-setting text='Minimum allowed NJS' min="0" max="30" integer-only="true" apply-on-change="true" bind-value="true" value="minimum-njs"/>
 				</vertical>
 			</bg>

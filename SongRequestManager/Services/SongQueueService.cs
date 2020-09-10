@@ -12,6 +12,7 @@ using SongCore;
 using SongRequestManager.Extensions;
 using SongRequestManager.Models;
 using SongRequestManager.Settings;
+using SongRequestManager.Settings.Partial;
 using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Services
@@ -55,7 +56,7 @@ namespace SongRequestManager.Services
 				return (false, "Song was not added. Queue is closed.");
 			}
 
-			if (SRMConfig.Instance.GeneralSettings.MaxQueueSize > 0 && RequestQueue.Count >= SRMConfig.Instance.GeneralSettings.MaxQueueSize)
+			if (SRMConfig.Instance.GeneralSettings.MaxQueueSize <= GeneralSettings.MAX_QUEUE_SIZE_UPPER_LIMIT && RequestQueue.Count >= SRMConfig.Instance.GeneralSettings.MaxQueueSize)
 			{
 				Logger.Log("Q full");
 				return (false, "Song was not added. Queue is full.");
@@ -84,7 +85,7 @@ namespace SongRequestManager.Services
 
 			var currentRequestCount = _statTrackService.GetCurrentRequestCountForUser(requestor.Id);
 			var maxConcurrentRequestCount = StatTrackService.GetMaxConcurrentRequestCountForUser(requestor);
-			if (currentRequestCount >= maxConcurrentRequestCount)
+			if (maxConcurrentRequestCount != null && currentRequestCount >= maxConcurrentRequestCount)
 			{
 				return (false, $"Request limit reached. You can only request {maxConcurrentRequestCount} song(s) in total.");
 			}
@@ -124,7 +125,7 @@ namespace SongRequestManager.Services
 			}
 
 			// Duration has fallback implemented by calculating average song duration according to the various difficulties
-			if (filters.MaximumSongDuration != 0
+			if (filters.MaximumSongDuration <= FilterSettings.MAX_SONG_DURATION_UPPER_LIMIT
 			    && (beatmap.Metadata.Duration > 0 && filters.MaximumSongDuration < beatmap.Metadata.Duration
 			        || filters.MaximumSongDuration < beatmap.Metadata
 				        .Characteristics

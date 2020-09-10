@@ -2,6 +2,7 @@ using System;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using SongRequestManager.Settings;
+using SongRequestManager.Settings.Partial;
 using UnityEngine;
 using Logger = SongRequestManager.Utilities.Logger;
 
@@ -20,12 +21,23 @@ namespace SongRequestManager.UI
 			set => SRMConfig.Instance.GeneralSettings.Prefix = value;
 		}
 
+
 		[UIValue("max-queue-size")]
 		public int MaxQueueSize
 		{
 			get => SRMConfig.Instance.GeneralSettings.MaxQueueSize;
 			set => SRMConfig.Instance.GeneralSettings.MaxQueueSize = value;
 		}
+
+		[UIValue("max-queue-size-upper-limit")]
+		public int MaxQueueSizeUpperLimit => GeneralSettings.MAX_QUEUE_SIZE_UPPER_LIMIT + 1;
+
+		[UIAction("max-queue-size-formatter")]
+		public string MaxQueueSizeFormat(int queueSize)
+		{
+			return FormatSliderUpperLimit(MaxQueueSizeUpperLimit, queueSize);
+		}
+
 
 		[UIValue("twitch-integration-enabled")]
 		public bool TwitchIntegrationEnabled
@@ -43,12 +55,32 @@ namespace SongRequestManager.UI
 			set => SRMConfig.Instance.TwitchSettings.UserRequestLimit = value;
 		}
 
+		[UIValue("user-request-upper-limit")]
+		public int UserRequestUpperLimit => TwitchSettings.USER_REQUEST_UPPER_LIMIT + 1;
+
+		[UIAction("user-request-formatter")]
+		public string UserRequestFormat(int limit)
+		{
+			return FormatSliderUpperLimit(UserRequestUpperLimit, limit);
+		}
+
+
 		[UIValue("sub-request-limit")]
 		public int SubRequestLimit
 		{
 			get => SRMConfig.Instance.TwitchSettings.SubRequestLimit;
 			set => SRMConfig.Instance.TwitchSettings.SubRequestLimit = value;
 		}
+
+		[UIValue("sub-request-upper-limit")]
+		public int SubRequestUpperLimit => TwitchSettings.SUB_REQUEST_UPPER_LIMIT + 1;
+
+		[UIAction("sub-request-formatter")]
+		public string SubRequestFormat(int limit)
+		{
+			return FormatSliderUpperLimit(SubRequestUpperLimit, limit);
+		}
+
 
 		[UIValue("mod-request-limit")]
 		public int ModRequestLimit
@@ -57,11 +89,30 @@ namespace SongRequestManager.UI
 			set => SRMConfig.Instance.TwitchSettings.ModRequestLimit = value;
 		}
 
+		[UIValue("mod-request-upper-limit")]
+		public int ModRequestUpperLimit => TwitchSettings.MOD_REQUEST_UPPER_LIMIT + 1;
+
+		[UIAction("mod-request-formatter")]
+		public string ModRequestFormat(int limit)
+		{
+			return FormatSliderUpperLimit(ModRequestUpperLimit, limit);
+		}
+
+
 		[UIValue("vip-bonus-limit")]
 		public int VipBonusLimit
 		{
 			get => SRMConfig.Instance.TwitchSettings.VipBonusLimit;
 			set => SRMConfig.Instance.TwitchSettings.VipBonusLimit = value;
+		}
+
+		[UIValue("vip-bonus-upper-limit")]
+		public int VipBonusUpperLimit => TwitchSettings.VIP_BONUS_UPPER_LIMIT + 1;
+
+		[UIAction("vip-bonus-formatter")]
+		public string VipBonusFormat(int limit)
+		{
+			return FormatSliderUpperLimit(VipBonusUpperLimit, limit);
 		}
 
 
@@ -73,12 +124,23 @@ namespace SongRequestManager.UI
 			set => SRMConfig.Instance.FilterSettings.MinimumRating = value;
 		}
 
+
 		[UIValue("maximum-song-duration")]
 		public int MaximumSongDuration
 		{
 			get => SRMConfig.Instance.FilterSettings.MaximumSongDuration;
 			set => SRMConfig.Instance.FilterSettings.MaximumSongDuration = value;
 		}
+
+		[UIValue("max-song-duration-upper-limit")]
+		public int MaximumSongDurationUpperLimit => FilterSettings.MAX_SONG_DURATION_UPPER_LIMIT + 1;
+
+		[UIAction("max-song-duration-formatter")]
+		public string MaximumSongDurationFormat(int maxDuration)
+		{
+			return FormatSliderUpperLimit(MaximumSongDurationUpperLimit, maxDuration);
+		}
+
 
 		[UIValue("minimum-njs")]
 		public int MinimumNjs
@@ -103,6 +165,12 @@ namespace SongRequestManager.UI
 		public void Setup()
 		{
 			SRMConfig.Instance.ConfigChanged += OnConfigChanged;
+		}
+
+
+		private static string FormatSliderUpperLimit(int upperLimit, int value)
+		{
+			return value >= upperLimit ? "Unlimited" : value.ToString();
 		}
 
 		private void OnConfigChanged(object sender, EventArgs e)
