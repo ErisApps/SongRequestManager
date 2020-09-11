@@ -54,9 +54,8 @@ namespace SongRequestManager.UI
 		public void Start()
 		{
 			Logger.Log("SRMBUTTON init invoked");
-			var standardLevel = _standardLevelDetailViewController;
 			BSMLParser.instance.Parse(BeatSaberMarkupLanguage.Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "SongRequestManager.UI.Views.SongRequestsButtonView.bsml"),
-				standardLevel.transform.Find("LevelDetail").gameObject, this);
+				_standardLevelDetailViewController.gameObject, this);
 			_srmButtonTransform.localScale *= 0.7f; //no scale property in bsml as of now so manually scaling it
 
 			_songQueueService.RequestQueue.CollectionChanged += OnRequestQueueChanged;
