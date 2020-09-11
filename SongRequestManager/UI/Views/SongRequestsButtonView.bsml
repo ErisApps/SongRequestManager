@@ -1,5 +1,5 @@
 <bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 
 	<button
 		id='srm-button'
@@ -7,7 +7,7 @@
 		glow-color='~glowy-color'
 		interactable='~interactable'
 		anchor-pos-x='28'
-		anchor-pos-y='66'
+		anchor-pos-y='-6'
 		pref-width='18'
 		pref-height='8'
 		word-wrapping='false'
