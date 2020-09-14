@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -9,7 +10,9 @@ using BeatSaverSharp;
 using ChatCore.Interfaces;
 using IPA.Utilities;
 using SongCore;
+using SongRequestManager.Events;
 using SongRequestManager.Extensions;
+using SongRequestManager.Helpers;
 using SongRequestManager.Models;
 using SongRequestManager.Settings;
 using SongRequestManager.Settings.Partial;
@@ -17,15 +20,19 @@ using SongRequestManager.Utilities;
 
 namespace SongRequestManager.Services
 {
-	public class SongQueueService
+	public class SongQueueService /*: IDisposable*/
 	{
 		private readonly BeatSaverService _beatSaverService;
 		private readonly StatTrackService _statTrackService;
+
+		private readonly ConcurrentDictionary<Guid, WeakReference<IRequestQueueChangeReceiver>> _requestQueueChangeReceivers;
 
 		internal SongQueueService(BeatSaverService beatSaverService, StatTrackService statTrackService)
 		{
 			_beatSaverService = beatSaverService;
 			_statTrackService = statTrackService;
+
+			_requestQueueChangeReceivers = new ConcurrentDictionary<Guid, WeakReference<IRequestQueueChangeReceiver>>();
 
 			RequestQueue = new ObservableCollection<Request>(SRMRequests.Instance.QueueData.Select(x =>
 			{
@@ -220,9 +227,47 @@ namespace SongRequestManager.Services
 			_statTrackService.DecreaseRequestCountForUser(request.Requestor);
 		}
 
+		internal IDisposable RegisterReceiver(IRequestQueueChangeReceiver receiver)
+		{
+			var weakReference = new WeakReference<IRequestQueueChangeReceiver>(receiver);
+			var key = Guid.NewGuid();
+
+			void DeregisterReceiver()
+			{
+				if (_requestQueueChangeReceivers.TryRemove(key, out _))
+				{
+					Logger.Log($"Removing receiver with Guid {key} => {receiver.GetType().FullName} (Total count: {_requestQueueChangeReceivers.Count})");
+				}
+			}
+
+			Logger.Log($"{nameof(SongQueueService)} hash: {GetHashCode()}", IPA.Logging.Logger.Level.Warning);
+			Logger.Log($"Registering receiver with Guid {key} => {receiver.GetType().FullName} (Total count: {_requestQueueChangeReceivers.Count + 1})");
+
+			_requestQueueChangeReceivers.TryAdd(key, weakReference);
+			return WeakActionToken.Create(this, _ => DeregisterReceiver());
+		}
+
 		private void RequestQueueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
+			Logger.Log($"{nameof(SongQueueService)} hash: {GetHashCode()}", IPA.Logging.Logger.Level.Warning);
 			Logger.Log($"Queue changed: {e.Action}");
+			Logger.Log($"Triggering {_requestQueueChangeReceivers.Count} receivers.");
+
+			Parallel.ForEach(_requestQueueChangeReceivers, kvp =>
+			{
+				if (kvp.Value.TryGetTarget(out var receiver))
+				{
+					Logger.Log($"{receiver.GetType().FullName} - {receiver.GetHashCode()}", IPA.Logging.Logger.Level.Warning);
+					receiver.Handle(sender, e);
+				}
+			});
 		}
+
+		/*public void Dispose()
+		{
+			Logger.Log($"{nameof(SongQueueService)} hash: {GetHashCode()}", IPA.Logging.Logger.Level.Warning);
+			Logger.Log($"Disposing {nameof(SongQueueService)}. Clearing {nameof(_requestQueueChangeReceivers)}");
+			_requestQueueChangeReceivers.Clear();
+		}*/
 	}
 }

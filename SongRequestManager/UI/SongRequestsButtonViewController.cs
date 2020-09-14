@@ -1,10 +1,14 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using IPA.Config.Stores.Attributes;
+using IPA.Utilities.Async;
 using SongRequestManager.Converters;
+using SongRequestManager.Events;
 using SongRequestManager.Services;
 using UnityEngine;
 using Zenject;
@@ -13,7 +17,7 @@ using Logger = SongRequestManager.Utilities.Logger;
 namespace SongRequestManager.UI
 {
 	[NotifyPropertyChanges]
-	internal class SongRequestsButtonViewController : BSMLAutomaticViewController
+	internal class SongRequestsButtonViewController : BSMLAutomaticViewController, IRequestQueueChangeReceiver
 	{
 		private StandardLevelDetailViewController _standardLevelDetailViewController = null!;
 		private LevelSelectionFlowCoordinator _levelSelectionFlowCoordinator = null!;
@@ -28,6 +32,8 @@ namespace SongRequestManager.UI
 
 		[UIComponent("srm-button")]
 		private Transform _srmButtonTransform = null!;
+
+		private IDisposable? _receiverSubscription;
 
 		[UIAction("button-click")]
 		internal void OpenRequestsView()
@@ -44,7 +50,7 @@ namespace SongRequestManager.UI
 		internal void Construct(StandardLevelDetailViewController standardLevelDetailViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator, SongQueueService songQueueService,
 			SongRequestsFlowCoordinator songRequestsFlowCoordinator)
 		{
-			Logger.Log("SRMBUTTON construct invoked");
+			Logger.Log($"SRMBUTTON construct invoked - Hashcode: {GetHashCode()}");
 			_standardLevelDetailViewController = standardLevelDetailViewController;
 			_levelSelectionFlowCoordinator = levelSelectionFlowCoordinator;
 			_songRequestsFlowCoordinator = songRequestsFlowCoordinator;
@@ -53,24 +59,24 @@ namespace SongRequestManager.UI
 
 		public void Start()
 		{
-			Logger.Log("SRMBUTTON init invoked");
+			Logger.Log($"SRMBUTTON init invoked - Hashcode: {GetHashCode()}");
 			BSMLParser.instance.Parse(BeatSaberMarkupLanguage.Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "SongRequestManager.UI.Views.SongRequestsButtonView.bsml"),
 				_standardLevelDetailViewController.gameObject, this);
 			_srmButtonTransform.localScale *= 0.7f; //no scale property in bsml as of now so manually scaling it
 
-			_songQueueService.RequestQueue.CollectionChanged += OnRequestQueueChanged;
+			_receiverSubscription?.Dispose();
+			_receiverSubscription = _songQueueService.RegisterReceiver(this);
 			UpdateSrmButtonColor();
 		}
 
 		protected override void OnDestroy()
 		{
-			if (_songQueueService != null)
-			{
-				_songQueueService.RequestQueue.CollectionChanged -= OnRequestQueueChanged;
-			}
+			Logger.Log("Destroying SRM button. So yeah... this instance is broken from now on...", IPA.Logging.Logger.Level.Warning);
+			_receiverSubscription?.Dispose();
+			_receiverSubscription = null;
 		}
 
-		private void OnRequestQueueChanged(object sender, NotifyCollectionChangedEventArgs e)
+		public Task Handle(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			switch (e.Action)
 			{
@@ -80,6 +86,8 @@ namespace SongRequestManager.UI
 					UpdateSrmButtonColor();
 					break;
 			}
+
+			return Task.CompletedTask;
 		}
 
 		private void UpdateSrmButtonColor()
@@ -91,7 +99,7 @@ namespace SongRequestManager.UI
 			}
 
 			GlowColor = ButtonColorValueConverter.Convert(_songQueueService.QueuedRequestCount > 0);
-			NotifyPropertyChanged(nameof(GlowColor));
+			UnityMainThreadTaskScheduler.Factory.StartNew(() => NotifyPropertyChanged(nameof(GlowColor)));
 		}
 	}
 }

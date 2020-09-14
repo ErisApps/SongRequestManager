@@ -16,6 +16,7 @@ namespace SongRequestManager.Commands
 		public RequestCommand(SongQueueService songQueueService)
 		{
 			_songQueueService = songQueueService;
+			Logger.Log($"{nameof(SongQueueService)} hash: {_songQueueService.GetHashCode()}", IPA.Logging.Logger.Level.Warning);
 
 			Alias = new[] {"bsr", "sr", "request"};
 			RequiredPermissions = new string[0];

@@ -24,6 +24,9 @@ namespace SongRequestManager.Services
 
 		public void Initialize()
 		{
+			Logger.Log($"{nameof(ChatHandlerService)} hash: {GetHashCode()}", IPA.Logging.Logger.Level.Warning);
+			Logger.Log($"{nameof(CommandManager)} hash: {_commandManager.GetHashCode()}", IPA.Logging.Logger.Level.Warning);
+
 			// ChatCore setup
 			_chatCore = ChatCoreInstance.Create();
 
@@ -31,15 +34,20 @@ namespace SongRequestManager.Services
 			{
 				if (SRMConfig.Instance.TwitchSettings.Enabled)
 				{
+					Logger.Log("Creating ChatHandlerService");
+
 					_twitchService = _chatCore.RunTwitchServices();
 					_twitchService.OnTextMessageReceived -= OnTextMessageReceived;
 					_twitchService.OnTextMessageReceived += OnTextMessageReceived;
+
+					Logger.Log("Created ChatHandlerService");
 				}
 			}
 		}
 
 		private async void OnTextMessageReceived(IChatService chatService, IChatMessage message)
 		{
+			Logger.Log($"{nameof(ChatHandlerService)} hash: {GetHashCode()}", IPA.Logging.Logger.Level.Warning);
 			Logger.Log($"ChatService: {chatService.DisplayName} - Message: {message.ToJson().ToString(4)}", IPA.Logging.Logger.Level.Trace);
 
 			var prefix = SRMConfig.Instance.GeneralSettings.Prefix;
@@ -62,15 +70,18 @@ namespace SongRequestManager.Services
 
 		public void Dispose()
 		{
-			Logger.Log("Disposing ChatHandlerService");
 			if (_chatCore != null)
 			{
-				_chatCore.StopAllServices();
-
 				if (_twitchService != null)
 				{
+					Logger.Log("Disposing ChatHandlerService");
+
 					_twitchService.OnTextMessageReceived -= OnTextMessageReceived;
 					_twitchService = null;
+
+					_chatCore.StopTwitchServices();
+
+					Logger.Log("Disposed ChatHandlerService");
 				}
 			}
 		}

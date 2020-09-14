@@ -13,7 +13,8 @@ namespace SongRequestManager.UI
 		private LevelSelectionFlowCoordinator? _levelSelectionFlowCoordinator;
 
 		[Inject]
-		internal void Construct(SongRequestsListViewController songRequestsListViewController, SongRequestsSettingsViewController songRequestsSettingsViewController, SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator)
+		internal void Construct(SongRequestsListViewController songRequestsListViewController, SongRequestsSettingsViewController songRequestsSettingsViewController,
+			SoloFreePlayFlowCoordinator levelSelectionFlowCoordinator)
 		{
 			_songRequestsSettingsViewController = songRequestsSettingsViewController;
 			_songRequestsListViewController = songRequestsListViewController;

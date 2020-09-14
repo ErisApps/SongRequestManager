@@ -9,6 +9,7 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using IPA.Utilities.Async;
 using SongRequestManager.Converters;
+using SongRequestManager.Events;
 using SongRequestManager.Models;
 using SongRequestManager.Services;
 using SongRequestManager.Settings;
@@ -19,16 +20,17 @@ using Logger = SongRequestManager.Utilities.Logger;
 
 namespace SongRequestManager.UI
 {
-	// The hotreload attribute requires a build of BSML that includes https://github.com/monkeymanboy/BeatSaberMarkupLanguage/pull/43
 	[HotReload(RelativePathToLayout = @"Views\SongRequestsListView.bsml")]
 	[ViewDefinition("SongRequestManager.UI.Views.SongRequestsListView.bsml")]
-	internal class SongRequestsListViewController : BSMLAutomaticViewController
+	internal class SongRequestsListViewController : BSMLAutomaticViewController, IRequestQueueChangeReceiver
 	{
 		private SongQueueService _songQueueService = null!;
 		private SongListUtils _songListUtils = null!;
 		private LoadingProgressModal.LoadingProgressModal _loadingProgressModal = null!;
 
 		private Request? _selectedRequest;
+
+		private IDisposable? _receiverSubscription;
 
 		public event Action DismissRequested = null!;
 
@@ -44,14 +46,14 @@ namespace SongRequestManager.UI
 		public CustomListTableData? customListTableData;
 
 		[UIAction("selectRequest")]
-		public void Select(TableView _, int row)
+		internal void Select(TableView _, int row)
 		{
 			_selectedRequest = _songQueueService.RequestQueue[row];
 			NotifyPropertyChanged(nameof(IsRequestSelected));
 		}
 
 		[UIValue("is-request-selected")]
-		public bool IsRequestSelected => _selectedRequest != null;
+		internal bool IsRequestSelected => _selectedRequest != null;
 
 		[UIAction("skip-button-click")]
 		internal void Skip()
@@ -152,10 +154,11 @@ namespace SongRequestManager.UI
 				var cellInfo = ConvertToCellInfo(request);
 				customListTableData.data.Add(cellInfo);
 
-				thumbnailLoadingTasks.Add(await UnityMainThreadTaskScheduler.Factory.StartNew(() => LoadThumbnailAsync(cellInfo, request)));
+				thumbnailLoadingTasks.Add(UnityMainThreadTaskScheduler.Factory.StartNew(async () => await LoadThumbnailAsync(cellInfo, request)));
 			}
 
-			_songQueueService.RequestQueue.CollectionChanged += RequestQueueOnCollectionChanged;
+			_receiverSubscription?.Dispose();
+			_receiverSubscription = _songQueueService.RegisterReceiver(this);
 
 			await UnityMainThreadTaskScheduler.Factory.StartNew(() => customListTableData.tableView.ReloadData());
 
@@ -169,6 +172,8 @@ namespace SongRequestManager.UI
 		{
 			base.OnDestroy();
 			SRMConfig.Instance.ConfigChanged -= OnConfigChanged;
+
+			_receiverSubscription?.Dispose();
 		}
 
 		private void OnConfigChanged(object sender, EventArgs e)
@@ -188,11 +193,17 @@ namespace SongRequestManager.UI
 			NotifyPropertyChanged(nameof(QueueButtonText));
 		}
 
-		private async void RequestQueueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		public async Task Handle(object sender, NotifyCollectionChangedEventArgs e)
 		{
+			if (this == null)
+			{
+				Logger.Log("This is null", IPA.Logging.Logger.Level.Error);
+				return;
+			}
+
 			if (customListTableData == null)
 			{
-				Logger.Log("Whoops, I did a fucky wucky :tehe:", IPA.Logging.Logger.Level.Error);
+				Logger.Log("customListTableData is null", IPA.Logging.Logger.Level.Error);
 				return;
 			}
 
@@ -219,7 +230,7 @@ namespace SongRequestManager.UI
 						return;
 				}
 
-				await UnityMainThreadTaskScheduler.Factory.StartNew(() => { customListTableData.tableView.ReloadData(); });
+				await UnityMainThreadTaskScheduler.Factory.StartNew(() => customListTableData.tableView.ReloadData());
 			}
 			catch (Exception exception)
 			{
@@ -236,7 +247,7 @@ namespace SongRequestManager.UI
 				var level = SongCoreUtils.CustomLevelForHash(request.BeatMap.Hash);
 				if (level != null)
 				{
-					await UnityMainThreadTaskScheduler.Factory.StartNew(async () => cellInfo.icon = await level.GetCoverImageTexture2DAsync(CancellationToken.None));
+					await UnityMainThreadTaskScheduler.Factory.StartNew(async () => cellInfo.icon = await level.GetCoverImageTexture2DAsync(CancellationToken.None)).ConfigureAwait(false);
 					return;
 				}
 			}
@@ -270,4 +281,6 @@ namespace SongRequestManager.UI
 		private static CustomListTableData.CustomCellInfo ConvertToCellInfo(Request request)
 			=> new CustomListTableData.CustomCellInfo(request.BeatMap.Metadata.SongName, request.BeatMap.Metadata.SongAuthorName);
 	}
+
+	// The hotreload attribute requires a build of BSML that includes https://github.com/monkeymanboy/BeatSaberMarkupLanguage/pull/43
 }
